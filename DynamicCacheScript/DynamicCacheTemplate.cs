@@ -1,7 +1,7 @@
 ﻿using Natasha;
 using System;
 using System.Text;
-namespace DynamicCacheScript
+namespace DynamicCache
 {
     public class DynamicCacheTemplate
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace DynamicCacheScript
+namespace DynamicCache
 {
     public static class DictExtension
     {
