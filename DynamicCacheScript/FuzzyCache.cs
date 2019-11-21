@@ -1,18 +1,15 @@
 ﻿using BTFindTree;
-using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using Natasha;
 using Natasha.Operator;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace DynamicCache
 {
-    
-    public class StringCache<string,TValue> : IDisposable
+
+    public class FuzzyCache<TValue> : IDisposable
     {
 
         public Func<string, int> KeyGetter;
@@ -26,7 +23,7 @@ namespace DynamicCache
         private AssemblyDomain _domain;
 
 
-        public StringCache(IDictionary<string, TValue> pairs)
+        public FuzzyCache(IDictionary<string, TValue> pairs)
         {
 
             var _cache = new Dictionary<string, TValue>(pairs);
@@ -59,7 +56,7 @@ namespace DynamicCache
 
 
             StringBuilder valueBuilder = new StringBuilder();
-            keyBuilder.Append(BTFTemplate.GetFuzzyPointBTFScript(_value_builder));
+            keyBuilder.Append(BTFTemplate.GetHashBTFScript(_value_builder));
             keyBuilder.Append("return -1;");
 
 

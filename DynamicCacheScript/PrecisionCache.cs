@@ -9,24 +9,24 @@ using System.Text;
 namespace DynamicCache
 {
 
-    public class HashCache<TKey,TValue> : IDisposable
+    public class PrecisionCache<TValue> : IDisposable
     {
 
-        public Func<TKey, int> KeyGetter;
+        public Func<string, int> KeyGetter;
         public Func<TValue, int> ValueGetter;
-        private Dictionary<TKey, string> _key_builder;
+        private Dictionary<string, string> _key_builder;
         private Dictionary<TValue, string> _value_builder;
-        public TKey[] KeyCache;
+        public string[] KeyCache;
         public TValue[] ValueCache;
         public int Length;
         public int Current;
         private AssemblyDomain _domain;
 
 
-        public HashCache(IDictionary<TKey, TValue> pairs)
+        public PrecisionCache(IDictionary<string, TValue> pairs)
         {
 
-            var _cache = new Dictionary<TKey, TValue>(pairs);
+            var _cache = new Dictionary<string, TValue>(pairs);
 
             KeyCache = _cache.Keys.ToArray();
             var values = new TValue[KeyCache.Length];
@@ -44,14 +44,14 @@ namespace DynamicCache
 
 
             StringBuilder keyBuilder = new StringBuilder();
-            keyBuilder.Append(BTFTemplate.GetHashBTFScript(_key_builder));
+            keyBuilder.Append(BTFTemplate.GetFuzzyPointBTFScript(_key_builder));
             keyBuilder.Append("return -1;");
 
 
             var builder = FakeMethodOperator.New;
             builder.Complier.Domain = _domain;
             KeyGetter =  builder.MethodBody(keyBuilder.ToString())
-                .Complie<Func<TKey, int>>();
+                .Complie<Func<string, int>>();
 
 
 
@@ -67,7 +67,7 @@ namespace DynamicCache
         }
 
 
-        public TValue this[TKey key] 
+        public TValue this[string key] 
         {
 
             get
@@ -82,7 +82,7 @@ namespace DynamicCache
 
 
 
-        public TKey GetKey(TValue value)
+        public string GetKey(TValue value)
         {
 
             int index = ValueGetter(value);
@@ -97,7 +97,7 @@ namespace DynamicCache
 
 
 
-        public TValue GetValue(TKey key)
+        public TValue GetValue(string key)
         {
 
             int index = KeyGetter(key);
@@ -119,7 +119,7 @@ namespace DynamicCache
 
 
 
-        public bool ContainsKey(TKey key)
+        public bool ContainsKey(string key)
         {
             return KeyGetter(key) != -1;
         }
