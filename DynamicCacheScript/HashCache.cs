@@ -6,37 +6,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DynamicCache
+namespace System
 {
 
     public class HashCache<TKey,TValue> : IDisposable
     {
 
-        public Func<TKey, int> KeyGetter;
-        public Func<TValue, int> ValueGetter;
-        private Dictionary<TKey, string> _key_builder;
-        private Dictionary<TValue, string> _value_builder;
-        public TKey[] KeyCache;
-        public TValue[] ValueCache;
-        public int Length;
-        public int Current;
-        private AssemblyDomain _domain;
+        private readonly Func<TKey, int> KeyGetter;
+        private readonly Func<TValue, int> ValueGetter;
+        private readonly TKey[] KeyCache;
+        private readonly TValue[] ValueCache;
+        public readonly int Length;
+        private readonly AssemblyDomain _domain;
 
 
         public HashCache(IDictionary<TKey, TValue> pairs)
         {
 
-            var _cache = new Dictionary<TKey, TValue>(pairs);
+            var cache = new Dictionary<TKey, TValue>(pairs);
+            Length = cache.Count;
+            var key_builder = new Dictionary<TKey, string>();
+            var value_builder = new Dictionary<TValue, string>();
 
-            KeyCache = _cache.Keys.ToArray();
-            var values = new TValue[KeyCache.Length];
+
+            KeyCache = cache.Keys.ToArray();
+            ValueCache = new TValue[KeyCache.Length];
 
 
             for (int i = 0; i < KeyCache.Length; i+=1)
             {
-                _key_builder[KeyCache[i]] =$"return {i};";
-                _value_builder[_cache[KeyCache[i]]] = $"return {i};";
-                values[i] = _cache[KeyCache[i]];
+                key_builder[KeyCache[i]] =$"return {i};";
+                value_builder[cache[KeyCache[i]]] = $"return {i};";
+                ValueCache[i] = cache[KeyCache[i]];
             }
 
 
@@ -44,11 +45,11 @@ namespace DynamicCache
 
 
             StringBuilder keyBuilder = new StringBuilder();
-            keyBuilder.Append(BTFTemplate.GetHashBTFScript(_key_builder));
+            keyBuilder.Append(BTFTemplate.GetHashBTFScript(key_builder));
             keyBuilder.Append("return -1;");
 
 
-            var builder = FakeMethodOperator.New;
+            var builder = FastMethodOperator.New;
             builder.Complier.Domain = _domain;
             KeyGetter =  builder.MethodBody(keyBuilder.ToString())
                 .Complie<Func<TKey, int>>();
@@ -56,13 +57,13 @@ namespace DynamicCache
 
 
             StringBuilder valueBuilder = new StringBuilder();
-            keyBuilder.Append(BTFTemplate.GetHashBTFScript(_value_builder));
-            keyBuilder.Append("return -1;");
+            valueBuilder.Append(BTFTemplate.GetHashBTFScript(value_builder));
+            valueBuilder.Append("return -1;");
 
 
-            builder = FakeMethodOperator.New;
+            builder = FastMethodOperator.New;
             builder.Complier.Domain = _domain;
-            ValueGetter = builder.MethodBody(keyBuilder.ToString())
+            ValueGetter = builder.MethodBody(valueBuilder.ToString())
                 .Complie<Func<TValue, int>>();
         }
 

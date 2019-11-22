@@ -6,37 +6,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DynamicCache
+namespace System
 {
 
     public class FuzzyCache<TValue> : IDisposable
     {
 
-        public Func<string, int> KeyGetter;
-        public Func<TValue, int> ValueGetter;
-        private Dictionary<string, string> _key_builder;
-        private Dictionary<TValue, string> _value_builder;
-        public string[] KeyCache;
-        public TValue[] ValueCache;
-        public int Length;
-        public int Current;
-        private AssemblyDomain _domain;
+        private readonly Func<string, int> KeyGetter;
+        private readonly Func<TValue, int> ValueGetter;
+        private readonly string[] KeyCache;
+        private readonly TValue[] ValueCache;
+        public readonly int Length;
+        private readonly AssemblyDomain _domain;
 
 
         public FuzzyCache(IDictionary<string, TValue> pairs)
         {
 
-            var _cache = new Dictionary<string, TValue>(pairs);
+            var cache = new Dictionary<string, TValue>(pairs);
+            Length = cache.Count;
+            var key_builder = new Dictionary<string, string>();
+            var value_builder = new Dictionary<TValue, string>();
 
-            KeyCache = _cache.Keys.ToArray();
-            var values = new TValue[KeyCache.Length];
+
+            KeyCache = cache.Keys.ToArray();
+            ValueCache = new TValue[KeyCache.Length];
 
 
-            for (int i = 0; i < KeyCache.Length; i+=1)
+            for (int i = 0; i < KeyCache.Length; i += 1)
             {
-                _key_builder[KeyCache[i]] =$"return {i};";
-                _value_builder[_cache[KeyCache[i]]] = $"return {i};";
-                values[i] = _cache[KeyCache[i]];
+                key_builder[KeyCache[i]] = $"return {i};";
+                value_builder[cache[KeyCache[i]]] = $"return {i};";
+                ValueCache[i] = cache[KeyCache[i]];
             }
 
 
@@ -44,30 +45,32 @@ namespace DynamicCache
 
 
             StringBuilder keyBuilder = new StringBuilder();
-            keyBuilder.Append(BTFTemplate.GetFuzzyPointBTFScript(_key_builder));
+            keyBuilder.Append(BTFTemplate.GetFuzzyPointBTFScript(key_builder));
             keyBuilder.Append("return -1;");
 
 
-            var builder = FakeMethodOperator.New;
+            var builder = FastMethodOperator.New;
             builder.Complier.Domain = _domain;
-            KeyGetter =  builder.MethodBody(keyBuilder.ToString())
+            KeyGetter = builder.MethodBody(keyBuilder.ToString())
+                  .UseUnsafe()
                 .Complie<Func<string, int>>();
 
 
 
             StringBuilder valueBuilder = new StringBuilder();
-            keyBuilder.Append(BTFTemplate.GetHashBTFScript(_value_builder));
-            keyBuilder.Append("return -1;");
+            valueBuilder.Append(BTFTemplate.GetHashBTFScript(value_builder));
+            valueBuilder.Append("return -1;");
 
 
-            builder = FakeMethodOperator.New;
+            builder = FastMethodOperator.New;
             builder.Complier.Domain = _domain;
-            ValueGetter = builder.MethodBody(keyBuilder.ToString())
+            ValueGetter = builder.MethodBody(valueBuilder.ToString())
+                  .UseUnsafe()
                 .Complie<Func<TValue, int>>();
         }
 
 
-        public TValue this[string key] 
+        public TValue this[string key]
         {
 
             get

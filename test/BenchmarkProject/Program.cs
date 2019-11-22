@@ -7,7 +7,7 @@ namespace BenchmarkProject
     {
         static void Main(string[] args)
         {
-            //BenchmarkRunner.Run<>();
+            BenchmarkRunner.Run<BenchmarkTest>();
             Console.ReadKey();
         }
     }
