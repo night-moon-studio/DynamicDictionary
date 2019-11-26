@@ -29,6 +29,8 @@ namespace System
         }
 
 
+
+
         public static HashCache<TKey, TValue> HashTree<TKey, TValue>(this Dictionary<TKey, TValue> dict)
         {
             return new HashCache<TKey, TValue>(dict);

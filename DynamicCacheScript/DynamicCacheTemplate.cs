@@ -7,10 +7,25 @@ namespace DynamicCache
     {
         public static StringBuilder GetFromStaticClass(Type operatorType, string operatorMethod, Type builderType, string builderMethod,  Func<string,string> builderParameter = null)
         {
+
+            return GetFromStaticClass(operatorType.GetDevelopName(), operatorMethod, builderType.GetDevelopName(), builderMethod, builderParameter);
+
+        }
+
+
+        public static StringBuilder GetFromStaticClass(string operatorType, string operatorMethod, string builderType, string builderMethod, Func<string, string> builderParameter = null)
+        {
+
+            return GetFromStaticClass($"{operatorType}.{operatorMethod}", $" {builderType}.{builderMethod}", builderParameter);
+
+        }
+
+
+        public static StringBuilder GetFromStaticClass(string operatorString, string builderString, Func<string, string> builderParameter = null)
+        {
             StringBuilder builder = new StringBuilder();
-            string operatorTypeName = operatorType.GetDevelopName();
-            builder.Append($"{operatorTypeName}.{operatorMethod} = {builderType.GetDevelopName()}.{builderMethod}({builderParameter?.Invoke("arg")??"arg"});");
-            builder.Append($"return {operatorTypeName}.{operatorMethod}(arg);");
+            builder.AppendLine($"{operatorString} = {builderString}({builderParameter?.Invoke("arg") ?? "arg"});");
+            builder.AppendLine($"return {operatorString}(arg);");
             return builder;
         }
     }

@@ -6,9 +6,11 @@ namespace UTProject.Model
 {
     public class TestModel
     {
+
         public Dictionary<string, string> Model1;
         public Dictionary<A, int> Model2;
         public Dictionary<int, A> Model3;
+
 
         public TestModel()
         {
