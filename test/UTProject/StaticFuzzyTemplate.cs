@@ -21,7 +21,7 @@ namespace UTProject
         [Fact(DisplayName = "模糊静态缓存测试1")]
         public void Test()
         {
-            FDC<string> fdc = new FDC<string>();
+            FDC<string,string> fdc = new FDC<string,string>();
             fdc = fdc | model.Model1 | BuilderModel<string, string>.Creator | OperatorModel<string, string>.Creator;
             Assert.Equal(@"fixed (char* c =  arg){
 switch (*(ushort*)(c+0)){case 48:

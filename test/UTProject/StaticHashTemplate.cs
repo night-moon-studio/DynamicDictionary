@@ -6,7 +6,7 @@ using Xunit;
 namespace UTProject
 {
 
-    [Trait("静态模板构造", "Fuzzy")]
+    [Trait("静态模板构造", "Hash")]
     public class StaticHashTemplate
     {
 
@@ -21,7 +21,7 @@ namespace UTProject
         [Fact(DisplayName = "Hash静态缓存测试1")]
         public void Test()
         {
-            HDC<A, string> hdc = new HDC<A, string>();
+            HDC<string,A, string> hdc = new HDC<string,A, string>();
 
             hdc = hdc | model.Model2 | BuilderModel<A, string>.Creator | OperatorModel<A, string>.Creator;
 

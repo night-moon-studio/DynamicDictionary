@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Natasha
 {
-    public class PDC<V>
+    public class PDC<P,V>
     {
 
         public MemberInfo OperatorInfo;
@@ -17,12 +17,12 @@ namespace Natasha
 
 
 
-        public static PDC<V> operator |(PDC<V> template, IDictionary<string, string> dict)
+        public static PDC<P,V> operator |(PDC<P,V> template, IDictionary<string, string> dict)
         {
             template.FindContent = BTFTemplate.GetPrecisionPointBTFScript(dict);
             return template;
         }
-        public static PDC<V> operator |(IDictionary<string, string> dict, PDC<V> template)
+        public static PDC<P,V> operator |(IDictionary<string, string> dict, PDC<P,V> template)
         {
             template.FindContent = BTFTemplate.GetPrecisionPointBTFScript(dict);
             return template;
@@ -30,11 +30,25 @@ namespace Natasha
 
 
 
-
-        public static PDC<V> operator |(Func<string, V> func, PDC<V> template)
+        public PDC<P, V> GetDC(Func<string, V> func)
         {
+            var tempType = func.Method.DeclaringType.DeclaringType;
+            int count = tempType.GetGenericArguments().Length;
+            Type type = default;
+            if (count == 0)
+            {
+                type = func.Method.DeclaringType.DeclaringType;
 
-            var type = func.Method.DeclaringType.DeclaringType.With(typeof(string), typeof(V));
+            }
+            else if (count == 1)
+            {
+                type = func.Method.DeclaringType.DeclaringType.With(typeof(V));
+            }
+            else
+            {
+                type = func.Method.DeclaringType.DeclaringType.With(typeof(string), typeof(V));
+            }
+
             var typeScript = type.GetDevelopName();
 
 
@@ -56,44 +70,28 @@ namespace Natasha
 
 
             var getMember = RFunc<Func<string, V>, MemberInfo[], MemberInfo>.Delegate(sb.ToString(), type);
-            template.OperatorInfo = getMember(func, members);
-            return template;
-
+            OperatorInfo = getMember(func, members);
+            return this;
         }
-        public static PDC<V> operator |(PDC<V> template, Func<string, V> func)
+
+
+        public static PDC<P,V> operator |(Func<string, V> func, PDC<P,V> template)
         {
 
-            var type = func.Method.DeclaringType.DeclaringType.With(typeof(string), typeof(V));
-            var typeScript = type.GetDevelopName();
+            return template.GetDC(func);
 
+        }
+        public static PDC<P,V> operator |(PDC<P,V> template, Func<string, V> func)
+        {
 
-            var getMembers = RFunc<Type, MemberInfo[]>.Delegate($@"
-            var type = typeof({typeScript});
-            return  (
-            from val in type.GetFields()
-            where val.FieldType == arg
-            select val).ToArray();", type, "System.Linq");
-
-
-            var members = getMembers(func.GetType());
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < members.Length; i += 1)
-            {
-                sb.Append($"if({typeScript}.{members[i].Name} == arg1){{ return arg2[{i}];}}");
-            }
-            sb.Append("return default;");
-
-
-            var getMember = RFunc<Func<string, V>, MemberInfo[], MemberInfo>.Delegate(sb.ToString(), type);
-            template.OperatorInfo = getMember(func, members);
-            return template;
+            return template.GetDC(func);
 
         }
 
 
 
 
-        public static PDC<V> operator |(Func<string, Func<string, V>> func, PDC<V> template)
+        public static PDC<P,V> operator |(Func<P, Func<string, V>> func, PDC<P,V> template)
         {
 
             template.BuilderInfo = func.Method;
@@ -101,7 +99,7 @@ namespace Natasha
 
         }
 
-        public static PDC<V> operator |(PDC<V> template, Func<string, Func<string, V>> func)
+        public static PDC<P,V> operator |(PDC<P,V> template, Func<P, Func<string, V>> func)
         {
 
             template.BuilderInfo = func.Method;
@@ -111,14 +109,15 @@ namespace Natasha
 
 
 
-        public static PDC<V> operator %(Func<string, string> paraFunc, PDC<V> template)
+
+        public static PDC<P,V> operator % (Func<string, string> paraFunc, PDC<P,V> template)
         {
 
             template.DealParameters = paraFunc;
             return template;
 
         }
-        public static PDC<V> operator %(PDC<V> template, Func<string, string> paraFunc)
+        public static PDC<P,V> operator % (PDC<P,V> template, Func<string, string> paraFunc)
         {
 
             template.DealParameters = paraFunc;
@@ -138,7 +137,7 @@ namespace Natasha
                 BuilderInfo.Name,
                 DealParameters));
 
-            return result.ToString(); 
+            return result.ToString();
 
         }
     }

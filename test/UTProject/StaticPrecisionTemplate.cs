@@ -21,7 +21,7 @@ namespace UTProject
         [Fact(DisplayName = "精确静态缓存测试1")]
         public void Test()
         {
-            PDC<string> pdc = new PDC<string>();
+            PDC<string,string> pdc = new PDC<string,string>();
             pdc = pdc | model.Model1 | BuilderModel<string, string>.Creator | OperatorModel<string, string>.Creator;
             Assert.Equal(@"fixed (char* c =  arg){
 switch(*(ushort*)(c + 0) ){
