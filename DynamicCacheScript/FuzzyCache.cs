@@ -41,19 +41,12 @@ namespace System
             }
 
 
-            _domain = DomainManagment.Create(Guid.NewGuid().ToString());
-
-
             StringBuilder keyBuilder = new StringBuilder();
             keyBuilder.Append(BTFTemplate.GetFuzzyPointBTFScript(key_builder));
             keyBuilder.Append("return -1;");
 
 
-            var builder = FastMethodOperator.New;
-            builder.Complier.Domain = _domain;
-            KeyGetter = builder.MethodBody(keyBuilder.ToString())
-                  .UseUnsafe()
-                .Complie<Func<string, int>>();
+            KeyGetter = RFunc<string, int>.UnsafeDelegate(keyBuilder.ToString());
 
 
 
@@ -62,11 +55,7 @@ namespace System
             valueBuilder.Append("return -1;");
 
 
-            builder = FastMethodOperator.New;
-            builder.Complier.Domain = _domain;
-            ValueGetter = builder.MethodBody(valueBuilder.ToString())
-                  .UseUnsafe()
-                .Complie<Func<TValue, int>>();
+            ValueGetter = RFunc<TValue, int>.UnsafeDelegate(valueBuilder.ToString());
         }
 
 

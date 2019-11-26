@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.0;</TargetFrameworks>
     <Product>DynamicCache</Product>
     <Description>将字典转换成动态查找树，以便快速查找。</Description>
     <Copyright>.NET Core Community and Contributors</Copyright>
@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetCore.BTFindTree" Version="0.4.1" />
-    <PackageReference Include="DotNetCore.Natasha" Version="2.0.5.2" />
+    <PackageReference Include="DotNetCore.Natasha" Version="2.1.1" />
   </ItemGroup>
 
 </Project>

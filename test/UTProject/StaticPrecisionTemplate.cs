@@ -23,7 +23,6 @@ namespace UTProject
         {
             PDC<string> pdc = new PDC<string>();
             pdc = pdc | model.Model1 | BuilderModel<string, string>.Creator | OperatorModel<string, string>.Creator;
-            File.WriteAllText("1.txt", pdc.ToString());
             Assert.Equal(@"fixed (char* c =  arg){
 switch(*(ushort*)(c + 0) ){
 case 48:

@@ -25,7 +25,7 @@ namespace UTProject
 
             hdc = hdc | model.Model2 | BuilderModel<A, string>.Creator | OperatorModel<A, string>.Creator;
 
-            File.WriteAllText("1.txt", hdc.ToString());
+            //File.WriteAllText("1.txt", hdc.ToString());
             //Assert.Equal("", hdc.ToString());
         }
     }

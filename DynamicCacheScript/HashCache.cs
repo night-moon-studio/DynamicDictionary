@@ -41,18 +41,13 @@ namespace System
             }
 
 
-            _domain = DomainManagment.Create(Guid.NewGuid().ToString());
-
 
             StringBuilder keyBuilder = new StringBuilder();
             keyBuilder.Append(BTFTemplate.GetHashBTFScript(key_builder));
             keyBuilder.Append("return -1;");
 
 
-            var builder = FastMethodOperator.New;
-            builder.Complier.Domain = _domain;
-            KeyGetter =  builder.MethodBody(keyBuilder.ToString())
-                .Complie<Func<TKey, int>>();
+            KeyGetter = RFunc<TKey, int>.UnsafeDelegate(keyBuilder.ToString());
 
 
 
@@ -61,10 +56,7 @@ namespace System
             valueBuilder.Append("return -1;");
 
 
-            builder = FastMethodOperator.New;
-            builder.Complier.Domain = _domain;
-            ValueGetter = builder.MethodBody(valueBuilder.ToString())
-                .Complie<Func<TValue, int>>();
+            ValueGetter = RFunc<TValue, int>.UnsafeDelegate(valueBuilder.ToString());
         }
 
 

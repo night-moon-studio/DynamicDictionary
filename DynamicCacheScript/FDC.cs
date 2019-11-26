@@ -38,7 +38,7 @@ namespace Natasha
             var typeScript = type.GetDevelopName();
 
 
-            var getMembers = NFunc<Type, MemberInfo[]>.Delegate($@"
+            var getMembers = RFunc<Type, MemberInfo[]>.Delegate($@"
             var type = typeof({typeScript});
             return  (
             from val in type.GetFields()
@@ -55,7 +55,7 @@ namespace Natasha
             sb.Append("return default;");
 
 
-            var getMember = NFunc<Func<string, V>, MemberInfo[], MemberInfo>.Delegate(sb.ToString(), type);
+            var getMember = RFunc<Func<string, V>, MemberInfo[], MemberInfo>.Delegate(sb.ToString(), type);
             template.OperatorInfo = getMember(func, members);
             return template;
 
@@ -67,7 +67,7 @@ namespace Natasha
             var typeScript = type.GetDevelopName();
 
 
-            var getMembers = NFunc<Type, MemberInfo[]>.Delegate($@"
+            var getMembers = RFunc<Type, MemberInfo[]>.Delegate($@"
             var type = typeof({typeScript});
             return  (
             from val in type.GetFields()
@@ -84,7 +84,7 @@ namespace Natasha
             sb.Append("return default;");
 
 
-            var getMember = NFunc<Func<string, V>, MemberInfo[], MemberInfo>.Delegate(sb.ToString(), type);
+            var getMember = RFunc<Func<string, V>, MemberInfo[], MemberInfo>.Delegate(sb.ToString(), type);
             template.OperatorInfo = getMember(func, members);
             return template;
 
@@ -139,7 +139,7 @@ namespace Natasha
                 BuilderInfo.Name,
                 DealParameters));
 
-            return result.ToString(); 
+            return result.ToString();
 
         }
     }

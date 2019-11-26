@@ -23,7 +23,6 @@ namespace UTProject
         {
             FDC<string> fdc = new FDC<string>();
             fdc = fdc | model.Model1 | BuilderModel<string, string>.Creator | OperatorModel<string, string>.Creator;
-            File.WriteAllText("1.txt", fdc.ToString());
             Assert.Equal(@"fixed (char* c =  arg){
 switch (*(ushort*)(c+0)){case 48:
 0
