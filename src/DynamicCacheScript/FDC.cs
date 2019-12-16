@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Natasha
 {
-    public class PDC<P,V>
+    public class FDC<P,V>
     {
 
         public MemberInfo OperatorInfo;
@@ -17,24 +17,25 @@ namespace Natasha
 
 
 
-        public static PDC<P,V> operator |(PDC<P,V> template, IDictionary<string, string> dict)
+        public static FDC<P,V> operator |(FDC<P,V> template, IDictionary<string, string> dict)
         {
-            template.FindContent = BTFTemplate.GetPrecisionPointBTFScript(dict);
+            template.FindContent = BTFTemplate.GetFuzzyPointBTFScript(dict);
             return template;
         }
-        public static PDC<P,V> operator |(IDictionary<string, string> dict, PDC<P,V> template)
+        public static FDC<P,V> operator |(IDictionary<string, string> dict, FDC<P,V> template)
         {
-            template.FindContent = BTFTemplate.GetPrecisionPointBTFScript(dict);
+            template.FindContent = BTFTemplate.GetFuzzyPointBTFScript(dict);
             return template;
         }
 
 
 
-        public PDC<P, V> GetDC(Func<string, V> func)
+
+        public FDC<P, V> GetDC(Func<string, V> func)
         {
             var tempType = func.Method.DeclaringType.DeclaringType;
             int count = tempType.GetGenericArguments().Length;
-            Type type = default;
+            Type type;
             if (count == 0)
             {
                 type = func.Method.DeclaringType.DeclaringType;
@@ -52,7 +53,7 @@ namespace Natasha
             var typeScript = type.GetDevelopName();
 
 
-            var getMembers = RFunc<Type, MemberInfo[]>.Delegate($@"
+            var getMembers = NDomain.Random().Func<Type, MemberInfo[]>($@"
             var type = typeof({typeScript});
             return  (
             from val in type.GetFields()
@@ -61,6 +62,9 @@ namespace Natasha
 
 
             var members = getMembers(func.GetType());
+            getMembers.DisposeDomain();
+
+
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < members.Length; i += 1)
             {
@@ -69,19 +73,20 @@ namespace Natasha
             sb.Append("return default;");
 
 
-            var getMember = RFunc<Func<string, V>, MemberInfo[], MemberInfo>.Delegate(sb.ToString(), type);
+            var getMember = NDomain.Random().Func<Func<string, V>, MemberInfo[], MemberInfo>(sb.ToString(), type);
             OperatorInfo = getMember(func, members);
+            getMember.DisposeDomain();
             return this;
         }
 
 
-        public static PDC<P,V> operator |(Func<string, V> func, PDC<P,V> template)
+        public static FDC<P, V> operator |(Func<string, V> func, FDC<P, V> template)
         {
 
             return template.GetDC(func);
 
         }
-        public static PDC<P,V> operator |(PDC<P,V> template, Func<string, V> func)
+        public static FDC<P, V> operator |(FDC<P, V> template, Func<string, V> func)
         {
 
             return template.GetDC(func);
@@ -91,7 +96,7 @@ namespace Natasha
 
 
 
-        public static PDC<P,V> operator |(Func<P, Func<string, V>> func, PDC<P,V> template)
+        public static FDC<P,V> operator |(Func<P, Func<string, V>> func, FDC<P,V> template)
         {
 
             template.BuilderInfo = func.Method;
@@ -99,7 +104,7 @@ namespace Natasha
 
         }
 
-        public static PDC<P,V> operator |(PDC<P,V> template, Func<P, Func<string, V>> func)
+        public static FDC<P,V> operator |(FDC<P,V> template, Func<P, Func<string, V>> func)
         {
 
             template.BuilderInfo = func.Method;
@@ -110,14 +115,14 @@ namespace Natasha
 
 
 
-        public static PDC<P,V> operator % (Func<string, string> paraFunc, PDC<P,V> template)
+        public static FDC<P,V> operator % (Func<string, string> paraFunc, FDC<P,V> template)
         {
 
             template.DealParameters = paraFunc;
             return template;
 
         }
-        public static PDC<P,V> operator % (PDC<P,V> template, Func<string, string> paraFunc)
+        public static FDC<P,V> operator % (FDC<P,V> template, Func<string, string> paraFunc)
         {
 
             template.DealParameters = paraFunc;

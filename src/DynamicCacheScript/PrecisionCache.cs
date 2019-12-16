@@ -1,6 +1,5 @@
 ﻿using BTFindTree;
 using Natasha;
-using Natasha.Operator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +16,6 @@ namespace System
         private readonly string[] KeyCache;
         private readonly TValue[] ValueCache;
         public readonly int Length;
-        private readonly AssemblyDomain _domain;
 
 
         public PrecisionCache(IDictionary<string, TValue> pairs)
@@ -49,7 +47,7 @@ namespace System
             keyBuilder.Append("return -1;");
 
 
-            KeyGetter = RFunc<string, int>.UnsafeDelegate(keyBuilder.ToString());
+            KeyGetter = NDomain.Random().UnsafeFunc<string, int>(keyBuilder.ToString());
 
 
 
@@ -58,7 +56,8 @@ namespace System
             valueBuilder.Append("return -1;");
 
 
-            ValueGetter = RFunc<TValue, int>.UnsafeDelegate(valueBuilder.ToString());
+            ValueGetter = NDomain.Random().UnsafeFunc<TValue, int>(valueBuilder.ToString());
+
         }
 
 
@@ -81,7 +80,7 @@ namespace System
         {
 
             int index = ValueGetter(value);
-            if (index > -1)
+            if (index != -1)
             {
                 return KeyCache[index];
             }
@@ -96,7 +95,7 @@ namespace System
         {
 
             int index = KeyGetter(key);
-            if (index > -1)
+            if (index != -1)
             {
                 return ValueCache[index];
             }
@@ -124,7 +123,8 @@ namespace System
 
         public void Dispose()
         {
-            _domain.Dispose();
+            KeyGetter.DisposeDomain();
+            ValueGetter.DisposeDomain();
         }
 
     }

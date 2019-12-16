@@ -19,8 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.BTFindTree" Version="0.4.1" />
-    <PackageReference Include="DotNetCore.Natasha" Version="2.1.1" />
+    <PackageReference Include="DotNetCore.BTFindTree" Version="1.0.0" />
+    <PackageReference Include="DotNetCore.Natasha" Version="2.7.0.1" />
   </ItemGroup>
 
 </Project>

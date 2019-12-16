@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Natasha
 {
-    public class FDC<P,V>
+    public class HDC<P,T,S>
     {
 
         public MemberInfo OperatorInfo;
@@ -17,21 +17,20 @@ namespace Natasha
 
 
 
-        public static FDC<P,V> operator |(FDC<P,V> template, IDictionary<string, string> dict)
+        public static HDC<P,T,S> operator |(HDC<P,T,S> template, IDictionary<T,String> dict)
         {
-            template.FindContent = BTFTemplate.GetFuzzyPointBTFScript(dict);
+            template.FindContent = BTFTemplate.GetHashBTFScript(dict);
             return template;
         }
-        public static FDC<P,V> operator |(IDictionary<string, string> dict, FDC<P,V> template)
+        public static HDC<P,T,S> operator |(IDictionary<T,String> dict, HDC<P,T,S> template)
         {
-            template.FindContent = BTFTemplate.GetFuzzyPointBTFScript(dict);
+            template.FindContent = BTFTemplate.GetHashBTFScript(dict);
             return template;
         }
 
 
 
-
-        public FDC<P, V> GetDC(Func<string, V> func)
+        public HDC<P, T, S> GetDC(Func<T, S> func)
         {
             var tempType = func.Method.DeclaringType.DeclaringType;
             int count = tempType.GetGenericArguments().Length;
@@ -43,17 +42,17 @@ namespace Natasha
             }
             else if (count == 1)
             {
-                type = func.Method.DeclaringType.DeclaringType.With(typeof(V));
+                type = func.Method.DeclaringType.DeclaringType.With(typeof(T));
             }
             else
             {
-                type = func.Method.DeclaringType.DeclaringType.With(typeof(string), typeof(V));
+                type = func.Method.DeclaringType.DeclaringType.With(typeof(string), typeof(T));
             }
 
             var typeScript = type.GetDevelopName();
 
 
-            var getMembers = RFunc<Type, MemberInfo[]>.Delegate($@"
+            var getMembers = NDomain.Random().Func<Type, MemberInfo[]>($@"
             var type = typeof({typeScript});
             return  (
             from val in type.GetFields()
@@ -62,6 +61,7 @@ namespace Natasha
 
 
             var members = getMembers(func.GetType());
+            getMembers.DisposeDomain();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < members.Length; i += 1)
             {
@@ -70,19 +70,18 @@ namespace Natasha
             sb.Append("return default;");
 
 
-            var getMember = RFunc<Func<string, V>, MemberInfo[], MemberInfo>.Delegate(sb.ToString(), type);
+            var getMember = NDomain.Random().Func<Func<T, S>, MemberInfo[], MemberInfo>(sb.ToString(), type);
             OperatorInfo = getMember(func, members);
+            getMember.DisposeDomain();
             return this;
         }
-
-
-        public static FDC<P, V> operator |(Func<string, V> func, FDC<P, V> template)
+        public static HDC<P,T,S> operator |(Func<T,S> func, HDC<P,T,S> template)
         {
 
             return template.GetDC(func);
 
         }
-        public static FDC<P, V> operator |(FDC<P, V> template, Func<string, V> func)
+        public static HDC<P,T,S> operator |(HDC<P,T,S> template, Func<T,S> func)
         {
 
             return template.GetDC(func);
@@ -92,7 +91,7 @@ namespace Natasha
 
 
 
-        public static FDC<P,V> operator |(Func<P, Func<string, V>> func, FDC<P,V> template)
+        public static HDC<P,T,S> operator |(Func<P, Func<T,S>> func, HDC<P,T,S> template)
         {
 
             template.BuilderInfo = func.Method;
@@ -100,7 +99,7 @@ namespace Natasha
 
         }
 
-        public static FDC<P,V> operator |(FDC<P,V> template, Func<P, Func<string, V>> func)
+        public static HDC<P,T,S> operator |(HDC<P,T,S> template, Func<P, Func<T,S>> func)
         {
 
             template.BuilderInfo = func.Method;
@@ -111,14 +110,14 @@ namespace Natasha
 
 
 
-        public static FDC<P,V> operator % (Func<string, string> paraFunc, FDC<P,V> template)
+        public static HDC<P,T,S> operator %(Func<string, string> paraFunc, HDC<P,T,S> template)
         {
 
             template.DealParameters = paraFunc;
             return template;
 
         }
-        public static FDC<P,V> operator % (FDC<P,V> template, Func<string, string> paraFunc)
+        public static HDC<P,T,S> operator %(HDC<P,T,S> template, Func<string, string> paraFunc)
         {
 
             template.DealParameters = paraFunc;

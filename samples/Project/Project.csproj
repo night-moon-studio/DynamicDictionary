@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DynamicCacheScript\DynamicCache.csproj" />
+    <ProjectReference Include="..\..\src\DynamicCacheScript\DynamicCache.csproj" />
   </ItemGroup>
 
 </Project>

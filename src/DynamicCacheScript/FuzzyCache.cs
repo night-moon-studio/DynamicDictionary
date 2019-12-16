@@ -9,23 +9,22 @@ using System.Text;
 namespace System
 {
 
-    public class HashCache<TKey,TValue> : IDisposable
+    public class FuzzyCache<TValue> : IDisposable
     {
 
-        private readonly Func<TKey, int> KeyGetter;
+        private readonly Func<string, int> KeyGetter;
         private readonly Func<TValue, int> ValueGetter;
-        private readonly TKey[] KeyCache;
+        private readonly string[] KeyCache;
         private readonly TValue[] ValueCache;
         public readonly int Length;
-        private readonly AssemblyDomain _domain;
 
 
-        public HashCache(IDictionary<TKey, TValue> pairs)
+        public FuzzyCache(IDictionary<string, TValue> pairs)
         {
 
-            var cache = new Dictionary<TKey, TValue>(pairs);
+            var cache = new Dictionary<string, TValue>(pairs);
             Length = cache.Count;
-            var key_builder = new Dictionary<TKey, string>();
+            var key_builder = new Dictionary<string, string>();
             var value_builder = new Dictionary<TValue, string>();
 
 
@@ -33,21 +32,20 @@ namespace System
             ValueCache = new TValue[KeyCache.Length];
 
 
-            for (int i = 0; i < KeyCache.Length; i+=1)
+            for (int i = 0; i < KeyCache.Length; i += 1)
             {
-                key_builder[KeyCache[i]] =$"return {i};";
+                key_builder[KeyCache[i]] = $"return {i};";
                 value_builder[cache[KeyCache[i]]] = $"return {i};";
                 ValueCache[i] = cache[KeyCache[i]];
             }
 
 
-
             StringBuilder keyBuilder = new StringBuilder();
-            keyBuilder.Append(BTFTemplate.GetHashBTFScript(key_builder));
+            keyBuilder.Append(BTFTemplate.GetFuzzyPointBTFScript(key_builder));
             keyBuilder.Append("return -1;");
 
 
-            KeyGetter = RFunc<TKey, int>.UnsafeDelegate(keyBuilder.ToString());
+            KeyGetter = NDomain.Random().UnsafeFunc<string, int>(keyBuilder.ToString());
 
 
 
@@ -56,11 +54,11 @@ namespace System
             valueBuilder.Append("return -1;");
 
 
-            ValueGetter = RFunc<TValue, int>.UnsafeDelegate(valueBuilder.ToString());
+            ValueGetter = NDomain.Random().UnsafeFunc<TValue, int>(valueBuilder.ToString());
         }
 
 
-        public TValue this[TKey key] 
+        public TValue this[string key]
         {
 
             get
@@ -75,11 +73,11 @@ namespace System
 
 
 
-        public TKey GetKey(TValue value)
+        public string GetKey(TValue value)
         {
 
             int index = ValueGetter(value);
-            if (index > -1)
+            if (index != -1)
             {
                 return KeyCache[index];
             }
@@ -90,11 +88,11 @@ namespace System
 
 
 
-        public TValue GetValue(TKey key)
+        public TValue GetValue(string key)
         {
 
             int index = KeyGetter(key);
-            if (index > -1)
+            if (index != -1)
             {
                 return ValueCache[index];
             }
@@ -112,7 +110,7 @@ namespace System
 
 
 
-        public bool ContainsKey(TKey key)
+        public bool ContainsKey(string key)
         {
             return KeyGetter(key) != -1;
         }
@@ -122,7 +120,8 @@ namespace System
 
         public void Dispose()
         {
-            _domain.Dispose();
+            KeyGetter.DisposeDomain();
+            ValueGetter.DisposeDomain();
         }
 
     }
