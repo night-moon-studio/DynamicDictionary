@@ -21,42 +21,44 @@ namespace System
         public PrecisionCache(IDictionary<string, TValue> pairs)
         {
 
-            var cache = new Dictionary<string, TValue>(pairs);
-            Length = cache.Count;
-            var key_builder = new Dictionary<string, string>();
-            var value_builder = new Dictionary<TValue, string>();
+
+                var cache = new Dictionary<string, TValue>(pairs);
+                Length = cache.Count;
+                var key_builder = new Dictionary<string, string>();
+                var value_builder = new Dictionary<TValue, string>();
 
 
-            KeyCache = cache.Keys.ToArray();
-            ValueCache = new TValue[KeyCache.Length];
+                KeyCache = cache.Keys.ToArray();
+                ValueCache = new TValue[KeyCache.Length];
 
 
-            for (int i = 0; i < KeyCache.Length; i += 1)
-            {
-                key_builder[KeyCache[i]] = $"return {i};";
-                value_builder[cache[KeyCache[i]]] = $"return {i};";
-                ValueCache[i] = cache[KeyCache[i]];
-            }
-
-
-
-
-
-            StringBuilder keyBuilder = new StringBuilder();
-            keyBuilder.Append(BTFTemplate.GetPrecisionPointBTFScript(key_builder));
-            keyBuilder.Append("return -1;");
-
-
-            KeyGetter = NDomain.Random().UnsafeFunc<string, int>(keyBuilder.ToString());
+                for (int i = 0; i < KeyCache.Length; i += 1)
+                {
+                    key_builder[KeyCache[i]] = $"return {i};";
+                    value_builder[cache[KeyCache[i]]] = $"return {i};";
+                    ValueCache[i] = cache[KeyCache[i]];
+                }
 
 
 
-            StringBuilder valueBuilder = new StringBuilder();
-            valueBuilder.Append(BTFTemplate.GetHashBTFScript(value_builder));
-            valueBuilder.Append("return -1;");
 
 
-            ValueGetter = NDomain.Random().UnsafeFunc<TValue, int>(valueBuilder.ToString());
+                StringBuilder keyBuilder = new StringBuilder();
+                keyBuilder.Append(BTFTemplate.GetPrecisionPointBTFScript(key_builder));
+                keyBuilder.Append("return -1;");
+
+
+                KeyGetter = NDomain.Random().UnsafeFunc<string, int>(keyBuilder.ToString());
+
+
+
+                StringBuilder valueBuilder = new StringBuilder();
+                valueBuilder.Append(BTFTemplate.GetHashBTFScript(value_builder));
+                valueBuilder.Append("return -1;");
+
+
+                ValueGetter = NDomain.Random().UnsafeFunc<TValue, int>(valueBuilder.ToString());
+           
 
         }
 
