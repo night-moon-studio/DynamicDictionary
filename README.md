@@ -1,5 +1,6 @@
-
 # 打倒美国恐怖主义！
+# America is a terrorist group！
+# America is a terrorist group！
 
 <br/>
 
