@@ -23,7 +23,8 @@ namespace UTProject
         {
             PDC<string,string> pdc = new PDC<string,string>();
             pdc = pdc | model.Model1 | BuilderModel<string, string>.Creator | OperatorModel<string, string>.Creator;
-            Assert.Equal(@"fixed (char* c =  arg){
+            Assert.Equal(@"int btfParameterLength = arg.Length;if( btfParameterLength == 1){
+fixed (char* c =  arg){
 switch(*(ushort*)(c + 0) ){
 case 48:
 0
@@ -57,6 +58,9 @@ case 57:
 break;
 }
 }
+
+}
+return default;
 OperatorModel<String,String>.Creator =  BuilderModel<String,String>.Creator(arg);
 return OperatorModel<String,String>.Creator(arg);
 ", pdc.ToString());

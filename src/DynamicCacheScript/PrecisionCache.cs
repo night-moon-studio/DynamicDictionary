@@ -44,7 +44,7 @@ namespace System
 
 
                 StringBuilder keyBuilder = new StringBuilder();
-                keyBuilder.Append(BTFTemplate.GetPrecisionPointBTFScript(key_builder));
+                keyBuilder.Append(BTFTemplate.GetGroupPrecisionPointBTFScript(key_builder));
                 keyBuilder.Append("return -1;");
 
 

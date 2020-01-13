@@ -19,12 +19,12 @@ namespace Natasha
 
         public static PDC<P,V> operator |(PDC<P,V> template, IDictionary<string, string> dict)
         {
-            template.FindContent = BTFTemplate.GetPrecisionPointBTFScript(dict);
+            template.FindContent = BTFTemplate.GetGroupPrecisionPointBTFScript(dict);
             return template;
         }
         public static PDC<P,V> operator |(IDictionary<string, string> dict, PDC<P,V> template)
         {
-            template.FindContent = BTFTemplate.GetPrecisionPointBTFScript(dict);
+            template.FindContent = BTFTemplate.GetGroupPrecisionPointBTFScript(dict);
             return template;
         }
 
