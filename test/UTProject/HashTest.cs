@@ -48,7 +48,28 @@ namespace UTProject
                 Assert.Equal(item.Value, HashHandler3[item.Key]);
             }
         }
+        [Fact(DisplayName = "Hash反向查找测试")]
+        public void TestModel5()
+        {
 
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict["a"] = "a";
+            dict["b"] = "a";
+            dict["c"] = "a";
+            dict["d"] = "e";
+            var handler = dict.HashTree();
+            foreach (var item in dict)
+            {
+                Assert.Equal(item.Value, handler[item.Key]);
+            }
+            
+            var hashSet = new HashSet<string>(handler.GetKeys("a"));
+            Assert.Equal(3, hashSet.Count);
+            Assert.Contains("a", hashSet);
+            Assert.Contains("b", hashSet);
+            Assert.Contains("c", hashSet);
+
+        }
 
         [Fact(DisplayName = "空集合测试1")]
         public void TestModel4()
@@ -58,7 +79,7 @@ namespace UTProject
             model2.Model1.Clear();
             var tempHandler = model2.Model1.HashTree();
             Assert.Equal(default, tempHandler["1"]);
-            Assert.Equal(default, tempHandler.GetKey("1"));
+            Assert.Equal(default, tempHandler.GetKeys("1"));
             Assert.Equal(default, tempHandler.GetValue("1"));
 
         }

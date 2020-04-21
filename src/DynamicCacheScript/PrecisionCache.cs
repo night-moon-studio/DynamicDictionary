@@ -1,4 +1,5 @@
 ﻿using BTFindTree;
+using DynamicCache;
 using Natasha;
 using Natasha.CSharp;
 using System;
@@ -9,126 +10,23 @@ using System.Text;
 namespace System
 {
 
-    public class PrecisionCache<TValue> : IDisposable
+    public class PrecisionCache<TValue> : DynamicCacheBuilder<string, TValue>
     {
 
-        private readonly Func<string, int> KeyGetter;
-        private readonly Func<TValue, int> ValueGetter;
-        private readonly string[] KeyCache;
-        private readonly TValue[] ValueCache;
-        public readonly int Length;
-
-
-        public PrecisionCache(IDictionary<string, TValue> pairs)
+        public PrecisionCache(IDictionary<string, TValue> pairs) : base(pairs)
         {
-
-
-                var cache = new Dictionary<string, TValue>(pairs);
-                Length = cache.Count;
-                var key_builder = new Dictionary<string, string>();
-                var value_builder = new Dictionary<TValue, string>();
-
-
-                KeyCache = cache.Keys.ToArray();
-                ValueCache = new TValue[KeyCache.Length];
-
-
-                for (int i = 0; i < KeyCache.Length; i += 1)
-                {
-                    key_builder[KeyCache[i]] = $"return {i};";
-                    value_builder[cache[KeyCache[i]]] = $"return {i};";
-                    ValueCache[i] = cache[KeyCache[i]];
-                }
-
-
-
-
-
-                StringBuilder keyBuilder = new StringBuilder();
-                keyBuilder.Append(BTFTemplate.GetGroupPrecisionPointBTFScript(key_builder));
-                keyBuilder.Append("return -1;");
-
-
-                KeyGetter = NDelegate.Random().UnsafeFunc<string, int>(keyBuilder.ToString());
-
-
-
-                StringBuilder valueBuilder = new StringBuilder();
-                valueBuilder.Append(BTFTemplate.GetHashBTFScript(value_builder));
-                valueBuilder.Append("return -1;");
-
-
-                ValueGetter = NDelegate.Random().UnsafeFunc<TValue, int>(valueBuilder.ToString());
-           
 
         }
 
-
-        public TValue this[string key] 
+        public override string ScriptValueAction(IDictionary<TValue, string> dict)
         {
-
-            get
-            {
-
-                return GetValue(key);
-
-            }
-
+            return BTFTemplate.GetHashBTFScript(dict);
+        }
+        public override string ScriptKeyAction(IDictionary<string, string> dict)
+        {
+            return BTFTemplate.GetFuzzyPointBTFScript(dict);
         }
 
-
-
-
-        public string GetKey(TValue value)
-        {
-
-            int index = ValueGetter(value);
-            if (index != -1)
-            {
-                return KeyCache[index];
-            }
-            return default;
-
-        }
-
-
-
-
-        public TValue GetValue(string key)
-        {
-
-            int index = KeyGetter(key);
-            if (index != -1)
-            {
-                return ValueCache[index];
-            }
-            return default;
-
-        }
-
-
-
-
-        public bool ContainValue(TValue value)
-        {
-            return ValueGetter(value) != -1;
-        }
-
-
-
-        public bool ContainsKey(string key)
-        {
-            return KeyGetter(key) != -1;
-        }
-
-
-
-
-        public void Dispose()
-        {
-            KeyGetter.DisposeDomain();
-            ValueGetter.DisposeDomain();
-        }
 
     }
 
