@@ -1,6 +1,6 @@
 ﻿using BTFindTree;
 using Natasha;
-using Natasha.Operator;
+using Natasha.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +45,7 @@ namespace System
             keyBuilder.Append("return -1;");
 
 
-            KeyGetter = NDomain.Random().UnsafeFunc<string, int>(keyBuilder.ToString());
+            KeyGetter = NDelegate.Random().UnsafeFunc<string, int>(keyBuilder.ToString());
 
 
 
@@ -54,7 +54,7 @@ namespace System
             valueBuilder.Append("return -1;");
 
 
-            ValueGetter = NDomain.Random().UnsafeFunc<TValue, int>(valueBuilder.ToString());
+            ValueGetter = NDelegate.Random().UnsafeFunc<TValue, int>(valueBuilder.ToString());
         }
 
 

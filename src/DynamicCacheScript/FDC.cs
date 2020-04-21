@@ -1,5 +1,6 @@
 ﻿using BTFindTree;
 using DynamicCache;
+using Natasha.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -53,7 +54,7 @@ namespace Natasha
             var typeScript = type.GetDevelopName();
 
 
-            var getMembers = NDomain.Random().Func<Type, MemberInfo[]>($@"
+            var getMembers = NDelegate.Random().Func<Type, MemberInfo[]>($@"
             var type = typeof({typeScript});
             return  (
             from val in type.GetFields()
@@ -73,7 +74,7 @@ namespace Natasha
             sb.Append("return default;");
 
 
-            var getMember = NDomain.Random().Func<Func<string, V>, MemberInfo[], MemberInfo>(sb.ToString(), type);
+            var getMember = NDelegate.Random().Func<Func<string, V>, MemberInfo[], MemberInfo>(sb.ToString(), type);
             OperatorInfo = getMember(func, members);
             getMember.DisposeDomain();
             return this;
