@@ -4,17 +4,17 @@
     <TargetFrameworks>netstandard2.0;netcoreapp3.0;</TargetFrameworks>
     <Product>DynamicCache</Product>
     <Description>将字典转换成动态查找树，以便快速查找。</Description>
-    <Copyright>.NET Core Community and Contributors</Copyright>
-    <PackageId>DotNetCore.Natasha.DynamicCache</PackageId>
+    <Copyright>Night Moon Studio</Copyright>
+    <PackageId>NMS.DynamicCache</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageReleaseNotes>将字典转换成动态查找树，以便快速查找。</PackageReleaseNotes>
-    <Version>1.4.0</Version>
-    <PackageLicenseUrl>https://github.com/dotnetcore/Natasha/blob/master/LICENSE</PackageLicenseUrl>
+    <Version>1.0.0</Version>
+    <PackageLicenseUrl>https://github.com/night-moon-studio/DynamicCache/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/night-moon-studio/DynamicCache</PackageProjectUrl>
     <PackageTags>Roslyn ; IL ; Scripte ; Dynamic ; Dictionary; Fast; </PackageTags>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Company>.NET Core Community</Company>
-    <PackageIconUrl>https://avatars2.githubusercontent.com/u/19404084</PackageIconUrl>
+    <Company>NMSAzulX</Company>
+    <PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
     <Authors>NMSAzulX</Authors>
   </PropertyGroup>
 
