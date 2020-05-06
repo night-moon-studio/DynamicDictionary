@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetCore.BTFindTree" Version="1.2.0.1" />
-    <PackageReference Include="DotNetCore.Natasha" Version="3.0.0.1" />
+    <PackageReference Include="NMS.RuntimeToDynamic" Version="1.0.0.1" />
   </ItemGroup>
 
 </Project>
