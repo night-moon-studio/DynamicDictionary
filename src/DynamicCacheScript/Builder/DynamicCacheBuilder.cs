@@ -17,61 +17,74 @@ namespace DynamicCache
         public abstract string ScriptKeyAction(IDictionary<TKey, string> dict);
         public abstract string ScriptValueAction(IDictionary<TValue, string> dict);
 
-        public DynamicCacheBuilder(IDictionary<TKey, TValue> pairs)
+        public DynamicCacheBuilder(IDictionary<TKey, TValue> pairs, DyanamicCacheDirection queryDirection =  DyanamicCacheDirection.Both)
         {
 
             var cache = new Dictionary<TKey, TValue>(pairs);
-            var key_builder = new Dictionary<TKey, string>();
-            var value_builder = new Dictionary<TValue, string>();
-            var temp_value_builder = new Dictionary<TValue, string>();
-
             Length = cache.Count;
             KeyCache = pairs.Keys.ToArray();
             ValueCache = new TValue[Length];
-
-
             for (int i = 0; i < Length; i += 1)
             {
 
-                var key = KeyCache[i];
                 var value = cache[KeyCache[i]];
-                key_builder[key] = $"return {i};";
-                if (!temp_value_builder.ContainsKey(value))
-                {
-                    temp_value_builder[value] = $"return new int[]{{{i}";
-                }
-                else
-                {
-                    temp_value_builder[value] += $",{i}";
-                }
                 ValueCache[i] = value;
 
             }
 
 
-            foreach (var item in temp_value_builder)
+            if (queryDirection != DyanamicCacheDirection.ValueToKey)
             {
 
-                value_builder[item.Key] = item.Value + "};";
+               
+                var key_builder = new Dictionary<TKey, string>();                
+                for (int i = 0; i < Length; i += 1)
+                {
+                    var key = KeyCache[i];
+                    key_builder[key] = $"return {i};";
+
+                }
+                StringBuilder keyBuilder = new StringBuilder();
+                keyBuilder.Append(ScriptKeyAction(key_builder));
+                keyBuilder.Append("return -1;");
+                KeyGetter = NDelegate.RandomDomain().UnsafeFunc<TKey, int>(keyBuilder.ToString());
+
+            }
+            
+
+
+            if (queryDirection != DyanamicCacheDirection.KeyToValue)
+            {
+
+                var value_builder = new Dictionary<TValue, string>();
+                var temp_value_builder = new Dictionary<TValue, string>();
+                for (int i = 0; i < Length; i += 1)
+                {
+                    var value = cache[KeyCache[i]];
+                    if (!temp_value_builder.ContainsKey(value))
+                    {
+                        temp_value_builder[value] = $"return new int[]{{{i}";
+                    }
+                    else
+                    {
+                        temp_value_builder[value] += $",{i}";
+                    }
+
+                }
+                foreach (var item in temp_value_builder)
+                {
+
+                    value_builder[item.Key] = item.Value + "};";
+
+                }
+
+                StringBuilder valueBuilder = new StringBuilder();
+                valueBuilder.Append(ScriptValueAction(value_builder));
+                valueBuilder.Append("return null;");
+                ValueGetter = NDelegate.RandomDomain().UnsafeFunc<TValue, int[]>(valueBuilder.ToString());
 
             }
 
-
-            StringBuilder keyBuilder = new StringBuilder();
-            keyBuilder.Append(ScriptKeyAction(key_builder));
-            keyBuilder.Append("return -1;");
-
-
-            KeyGetter = NDelegate.Random().UnsafeFunc<TKey, int>(keyBuilder.ToString());
-
-
-
-            StringBuilder valueBuilder = new StringBuilder();
-            valueBuilder.Append(ScriptValueAction(value_builder));
-            valueBuilder.Append("return null;");
-
-
-            ValueGetter = NDelegate.Random().UnsafeFunc<TValue, int[]>(valueBuilder.ToString());
         }
 
 

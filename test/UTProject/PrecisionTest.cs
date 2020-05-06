@@ -47,11 +47,14 @@ namespace UTProject
             dict["b"] = "a";
             dict["c"] = "a";
             dict["d"] = "e";
+
+
             var handler = dict.PrecisioTree();
             foreach (var item in dict)
             {
                 Assert.Equal(item.Value, handler[item.Key]);
             }
+
 
             var hashSet = new HashSet<string>(handler.GetKeys("a"));
             Assert.Equal(3, hashSet.Count);

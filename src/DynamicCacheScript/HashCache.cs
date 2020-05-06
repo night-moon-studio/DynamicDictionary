@@ -13,7 +13,7 @@ namespace System
     public class HashCache<TKey,TValue> : DynamicCacheBuilder<TKey, TValue>
     {
 
-        public HashCache(IDictionary<TKey, TValue> pairs) : base(pairs)
+        public HashCache(IDictionary<TKey, TValue> pairs, DyanamicCacheDirection queryDirection = DyanamicCacheDirection.Both) : base(pairs, queryDirection)
         {
 
 

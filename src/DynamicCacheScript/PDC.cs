@@ -53,7 +53,7 @@ namespace Natasha
             var typeScript = type.GetDevelopName();
 
 
-            var getMembers = NDelegate.Random().Func<Type, MemberInfo[]>($@"
+            var getMembers = NDelegate.RandomDomain().Func<Type, MemberInfo[]>($@"
             var type = typeof({typeScript});
             return  (
             from val in type.GetFields()
@@ -71,7 +71,7 @@ namespace Natasha
             sb.Append("return default;");
 
 
-            var getMember = NDelegate.Random().Func<Func<string, V>, MemberInfo[], MemberInfo>(sb.ToString(), type);
+            var getMember = NDelegate.RandomDomain().Func<Func<string, V>, MemberInfo[], MemberInfo>(sb.ToString(), type);
             OperatorInfo = getMember(func, members);
             getMember.DisposeDomain();
             return this;

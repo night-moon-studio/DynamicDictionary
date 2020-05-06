@@ -13,7 +13,7 @@ namespace System
     public class FuzzyCache<TValue> : DynamicCacheBuilder<string, TValue>
     {
 
-        public FuzzyCache(IDictionary<string, TValue> pairs):base(pairs)
+        public FuzzyCache(IDictionary<string, TValue> pairs, DyanamicCacheDirection queryDirection = DyanamicCacheDirection.Both) :base(pairs, queryDirection)
         {
 
            

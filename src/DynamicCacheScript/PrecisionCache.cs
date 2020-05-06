@@ -13,7 +13,7 @@ namespace System
     public class PrecisionCache<TValue> : DynamicCacheBuilder<string, TValue>
     {
 
-        public PrecisionCache(IDictionary<string, TValue> pairs) : base(pairs)
+        public PrecisionCache(IDictionary<string, TValue> pairs, DyanamicCacheDirection queryDirection = DyanamicCacheDirection.Both) : base(pairs, queryDirection)
         {
 
         }
@@ -24,7 +24,7 @@ namespace System
         }
         public override string ScriptKeyAction(IDictionary<string, string> dict)
         {
-            return BTFTemplate.GetFuzzyPointBTFScript(dict);
+            return BTFTemplate.GetGroupPrecisionPointBTFScript(dict);
         }
 
 
