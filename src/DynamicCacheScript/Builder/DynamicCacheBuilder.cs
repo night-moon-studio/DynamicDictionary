@@ -47,7 +47,7 @@ namespace DynamicCache
                 StringBuilder keyBuilder = new StringBuilder();
                 keyBuilder.Append(ScriptKeyAction(key_builder));
                 keyBuilder.Append("return -1;");
-                KeyGetter = NDelegate.RandomDomain().UnsafeFunc<TKey, int>(keyBuilder.ToString());
+                KeyGetter = NDelegate.UseDomain(typeof(TKey).GetDomain()).UnsafeFunc<TKey, int>(keyBuilder.ToString());
 
             }
             
@@ -81,7 +81,7 @@ namespace DynamicCache
                 StringBuilder valueBuilder = new StringBuilder();
                 valueBuilder.Append(ScriptValueAction(value_builder));
                 valueBuilder.Append("return null;");
-                ValueGetter = NDelegate.RandomDomain().UnsafeFunc<TValue, int[]>(valueBuilder.ToString());
+                ValueGetter = NDelegate.UseDomain(typeof(TValue).GetDomain()).UnsafeFunc<TValue, int[]>(valueBuilder.ToString());
 
             }
 
