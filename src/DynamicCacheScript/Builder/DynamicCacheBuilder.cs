@@ -1,4 +1,6 @@
 ﻿using Natasha.CSharp;
+using Natasha.CSharp.Operator;
+using Natasha.RuntimeToDynamic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,45 +11,45 @@ namespace DynamicCache
     public abstract class DynamicCacheBuilder<TKey,TValue> : IDisposable
     {
 
-        private readonly Func<TKey, int> KeyGetter;
-        private readonly Func<TValue, int[]> ValueGetter;
-        private readonly TKey[] KeyCache;
-        private readonly TValue[] ValueCache;
-        public readonly int Length;
+        public readonly Func<TKey, TValue> GetValue;
+        public readonly Func<TValue, TKey[]> GetKeys;
         public abstract string ScriptKeyAction(IDictionary<TKey, string> dict);
         public abstract string ScriptValueAction(IDictionary<TValue, string> dict);
 
         public DynamicCacheBuilder(IDictionary<TKey, TValue> pairs, DyanamicCacheDirection queryDirection =  DyanamicCacheDirection.Both)
         {
 
-            var cache = new Dictionary<TKey, TValue>(pairs);
-            Length = cache.Count;
-            KeyCache = pairs.Keys.ToArray();
-            ValueCache = new TValue[Length];
-            for (int i = 0; i < Length; i += 1)
-            {
-
-                var value = cache[KeyCache[i]];
-                ValueCache[i] = value;
-
-            }
+            
 
 
             if (queryDirection != DyanamicCacheDirection.ValueToKey)
             {
 
-               
-                var key_builder = new Dictionary<TKey, string>();                
-                for (int i = 0; i < Length; i += 1)
+                AnonymousRTD _r2d_handler = AnonymousRTD.UseDomain(typeof(TKey).GetDomain());
+                var key_builder = new Dictionary<TKey, string>();
+                foreach (var item in pairs)
                 {
-                    var key = KeyCache[i];
-                    key_builder[key] = $"return {i};";
-
+                    key_builder[item.Key] = $"return {_r2d_handler.AddValue(item.Value)};";
                 }
+                
+
                 StringBuilder keyBuilder = new StringBuilder();
                 keyBuilder.Append(ScriptKeyAction(key_builder));
-                keyBuilder.Append("return -1;");
-                KeyGetter = NDelegate.UseDomain(typeof(TKey).GetDomain()).UnsafeFunc<TKey, int>(keyBuilder.ToString());
+                keyBuilder.Append("return default;");
+
+
+                var method = typeof(Func<TKey, TValue>).GetMethod("Invoke");
+                _r2d_handler.Body(FakeMethodOperator.RandomDomain()
+                    .UseMethod(method)
+                    .Unsafe()
+                    .StaticMethodBody(keyBuilder.ToString())
+                    .Script);
+                var type = _r2d_handler.Complie();
+
+
+                GetValue = NDelegate
+                    .UseDomain(typeof(TKey).GetDomain())
+                    .Func<Func<TKey, TValue>>($"return {_r2d_handler.TypeName}.Invoke;", type)();
 
             }
             
@@ -56,36 +58,52 @@ namespace DynamicCache
             if (queryDirection != DyanamicCacheDirection.KeyToValue)
             {
 
-                var value_builder = new Dictionary<TValue, string>();
-                var temp_value_builder = new Dictionary<TValue, string>();
-                for (int i = 0; i < Length; i += 1)
+                AnonymousRTD _r2d_handler = AnonymousRTD.UseDomain(typeof(TKey).GetDomain());
+                var value_builder = new Dictionary<TValue, string>();                
+                foreach (var item in pairs)
                 {
-                    var value = cache[KeyCache[i]];
-                    if (!temp_value_builder.ContainsKey(value))
+                    if (!value_builder.ContainsKey(item.Value))
                     {
-                        temp_value_builder[value] = $"return new int[]{{{i}";
+                        value_builder[item.Value] = $"return new {typeof(TKey).GetDevelopName()}[]{{{_r2d_handler.AddValue(item.Key)}";
                     }
                     else
                     {
-                        temp_value_builder[value] += $",{i}";
+                        value_builder[item.Value] += $",{_r2d_handler.AddValue(item.Key)}";
                     }
-
                 }
-                foreach (var item in temp_value_builder)
+
+                var temp_value_buidler = new Dictionary<TValue, string>();
+                foreach (var item in value_builder)
                 {
 
-                    value_builder[item.Key] = item.Value + "};";
+                    temp_value_buidler[item.Key] = item.Value + "};";
 
                 }
 
+
                 StringBuilder valueBuilder = new StringBuilder();
-                valueBuilder.Append(ScriptValueAction(value_builder));
+                valueBuilder.Append(ScriptValueAction(temp_value_buidler));
                 valueBuilder.Append("return null;");
-                ValueGetter = NDelegate.UseDomain(typeof(TValue).GetDomain()).UnsafeFunc<TValue, int[]>(valueBuilder.ToString());
+
+
+                var method = typeof(Func<TValue, TKey[]>).GetMethod("Invoke");
+                _r2d_handler.Body(FakeMethodOperator.RandomDomain()
+                    .UseMethod(method)
+                    .Unsafe()
+                    .StaticMethodBody(valueBuilder.ToString())
+                    .Script);
+                var type = _r2d_handler.Complie();
+
+
+                GetKeys = NDelegate
+                    .UseDomain(typeof(TValue).GetDomain())
+                    .Func<Func<TValue, TKey[]>>($"return {_r2d_handler.TypeName}.Invoke;", type)();
 
             }
 
         }
+
+
 
 
         public TValue this[TKey key]
@@ -103,60 +121,10 @@ namespace DynamicCache
 
 
 
-        public TKey[] GetKeys(TValue value)
-        {
-
-            int[] index = ValueGetter(value);
-            if (index != null)
-            {
-                var result = new TKey[index.Length];
-                for (int i = 0; i < index.Length; i++)
-                {
-                    result[i] = KeyCache[i];
-                }
-                return result;
-            }
-            return default;
-
-        }
-
-
-
-
-        public TValue GetValue(TKey key)
-        {
-
-            int index = KeyGetter(key);
-            if (index != -1)
-            {
-                return ValueCache[index];
-            }
-            return default;
-
-        }
-
-
-
-
-        public bool ContainValue(TValue value)
-        {
-            return ValueGetter(value) != null;
-        }
-
-
-
-        public bool ContainsKey(TKey key)
-        {
-            return KeyGetter(key) != -1;
-        }
-
-
-
-
         public void Dispose()
         {
-            KeyGetter.DisposeDomain();
-            ValueGetter.DisposeDomain();
+            GetKeys.DisposeDomain();
+            GetKeys.DisposeDomain();
         }
     }
 }
