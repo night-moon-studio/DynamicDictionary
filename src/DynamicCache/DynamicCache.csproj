@@ -8,7 +8,7 @@
     <PackageId>NMS.DynamicCache</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageReleaseNotes>将字典转换成动态查找树，以便快速查找。</PackageReleaseNotes>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <PackageLicenseUrl>https://github.com/night-moon-studio/DynamicCache/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/night-moon-studio/DynamicCache</PackageProjectUrl>
     <PackageTags>Roslyn ; IL ; Scripte ; Dynamic ; Dictionary; Fast; </PackageTags>
@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetCore.BTFindTree" Version="1.2.0.1" />
-    <PackageReference Include="NMS.RuntimeToDynamic" Version="1.0.0.1" />
+    <PackageReference Include="NMS.RuntimeToDynamic" Version="1.1.0" />
   </ItemGroup>
 
 </Project>
