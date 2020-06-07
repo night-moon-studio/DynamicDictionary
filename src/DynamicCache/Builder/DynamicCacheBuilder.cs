@@ -1,9 +1,7 @@
 ﻿using Natasha.CSharp;
-using Natasha.CSharp.Operator;
 using Natasha.RuntimeToDynamic;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace DynamicCache
@@ -39,7 +37,7 @@ namespace DynamicCache
 
 
                 var method = typeof(Func<TKey, TValue>).GetMethod("Invoke");
-                _r2d_handler.Body(FakeMethodOperator.RandomDomain()
+                _r2d_handler.BodyAppend(FakeMethodOperator.RandomDomain()
                     .UseMethod(method)
                     .Unsafe()
                     .StaticMethodBody(keyBuilder.ToString())
