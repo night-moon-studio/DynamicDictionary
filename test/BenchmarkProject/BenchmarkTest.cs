@@ -5,6 +5,7 @@ using BenchmarkDotNet.Order;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Text;
 
 namespace BenchmarkProject
@@ -24,14 +25,17 @@ namespace BenchmarkProject
         public readonly PrecisionCache<string> PrecisionHandler;
         public readonly Dictionary<string, string> DictHandler;
         public readonly ConcurrentDictionary<string, string> ConDictHandler;
+        public readonly ImmutableDictionary<string, string> ReadonlyDictHandler;
         public BenchmarkTest()
         {
+            NatashaInitializer.InitializeAndPreheating();
             model = new TestModel();
             FuzzyHandler = model.Model1.FuzzyTree();
             HashHandler = model.Model1.HashTree();
             PrecisionHandler = model.Model1.PrecisioTree();
             DictHandler = model.Model1;
             ConDictHandler = new ConcurrentDictionary<string, string>(model.Model1);
+            ReadonlyDictHandler = ImmutableDictionary.CreateRange(DictHandler);
         }
 
         [Benchmark(Description = "哈希查找树")]
@@ -68,6 +72,13 @@ namespace BenchmarkProject
         {
             var result = ConDictHandler["11"];
             result = ConDictHandler["2"];
+        }
+
+        [Benchmark(Description = "只读字典")]
+        public void TestImmDict()
+        {
+            var result = ReadonlyDictHandler["11"];
+            result = ReadonlyDictHandler["2"];
         }
 
     }
