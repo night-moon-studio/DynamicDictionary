@@ -1,61 +1,53 @@
 ﻿using Natasha.CSharp;
-using RuntimeToDynamic;
+using Natasha.RuntimeToDynamic;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DynamicCache
 {
-
-    public unsafe abstract class DynamicCacheBuilder<TKey,TValue> : IDisposable
+    public abstract class DynamicCacheBuilder<TKey,TValue> : IDisposable
     {
 
-        public Type ProxyType;
-        public delegate* managed<TKey, TValue> GetValue;
-        public delegate* managed<TValue, TKey[]> GetKeys;
+        public readonly Func<TKey, TValue> GetValue;
+        public readonly Func<TValue, TKey[]> GetKeys;
         public abstract string ScriptKeyAction(IDictionary<TKey, string> dict);
         public abstract string ScriptValueAction(IDictionary<TValue, string> dict);
 
         public DynamicCacheBuilder(IDictionary<TKey, TValue> pairs, DyanamicCacheDirection queryDirection =  DyanamicCacheDirection.Both)
         {
 
-            Func<Type,IntPtr> InitGetValuePtr = default;
-            Func<Type, IntPtr> InitGetKeysPtr = default;
+            
 
-            var nClass = NClass.UseDomain(typeof(TKey).GetDomain())
-                    .Public()
-                    .Static()
-                    .Unsafe();
-
-            AnonymousRTD _r2d_handler = new AnonymousRTD();
-            _r2d_handler.UseStaticReadonlyFields();
 
             if (queryDirection != DyanamicCacheDirection.ValueToKey)
             {
 
+                AnonymousRTD _r2d_handler = AnonymousRTD.UseDomain(typeof(TKey).GetDomain());
                 var key_builder = new Dictionary<TKey, string>();
                 foreach (var item in pairs)
                 {
                     key_builder[item.Key] = $"return {_r2d_handler.AddValue(item.Value)};";
                 }
+                
 
                 StringBuilder keyBuilder = new StringBuilder();
                 keyBuilder.Append(ScriptKeyAction(key_builder));
                 keyBuilder.Append("return default;");
 
-                
-                nClass.Method(method =>
-                {
-                    method
-                    .Param<TKey>("arg")
-                    .Return<TValue>()
-                    .Name("GetValueFromKey")
-                    .Public()
-                    .Static()
-                    .Body(keyBuilder.ToString());
-                });
 
-                InitGetValuePtr = (type) => {  return type.GetMethod("GetValueFromKey").MethodHandle.GetFunctionPointer(); };
+                var method = typeof(Func<TKey, TValue>).GetMethod("Invoke");
+                _r2d_handler.BodyAppend(FakeMethodOperator.RandomDomain()
+                    .UseMethod(method)
+                    .Unsafe()
+                    .StaticMethodBody(keyBuilder.ToString())
+                    .Script);
+                var type = _r2d_handler.Complie();
+
+
+                GetValue = NDelegate
+                    .UseDomain(typeof(TKey).GetDomain())
+                    .Func<Func<TKey, TValue>>($"return {_r2d_handler.TypeName}.Invoke;", type)();
 
             }
             
@@ -64,6 +56,7 @@ namespace DynamicCache
             if (queryDirection != DyanamicCacheDirection.KeyToValue)
             {
 
+                AnonymousRTD _r2d_handler = AnonymousRTD.UseDomain(typeof(TKey).GetDomain());
                 var value_builder = new Dictionary<TValue, string>();                
                 foreach (var item in pairs)
                 {
@@ -91,37 +84,21 @@ namespace DynamicCache
                 valueBuilder.Append("return null;");
 
 
-                nClass.Method(method =>
-                {
-                    method
-                    .Param<TValue>("arg")
-                    .Return<TKey[]>()
-                    .Name("GetKeysFromValue")
-                    .Public()
-                    .Static()
-                    .Body(valueBuilder.ToString());
-                });
+                var method = typeof(Func<TValue, TKey[]>).GetMethod("Invoke");
+                _r2d_handler.Body(FakeMethodOperator.RandomDomain()
+                    .UseMethod(method)
+                    .Unsafe()
+                    .StaticMethodBody(valueBuilder.ToString())
+                    .Script);
+                var type = _r2d_handler.Complie();
 
-                InitGetKeysPtr = (type) => { return type.GetMethod("GetKeysFromValue").MethodHandle.GetFunctionPointer(); };
+
+                GetKeys = NDelegate
+                    .UseDomain(typeof(TValue).GetDomain())
+                    .Func<Func<TValue, TKey[]>>($"return {_r2d_handler.TypeName}.Invoke;", type)();
 
             }
 
-            nClass
-                    .BodyAppendLine(_r2d_handler.FieldsScript)
-                    .BodyAppendLine(_r2d_handler.MethodScript);
-
-
-            ProxyType = nClass.GetType();
-            _r2d_handler.GetInitMethod(nClass)();
-
-            if (InitGetValuePtr!=default)
-	        {
-                GetValue = (delegate* managed<TKey, TValue>)InitGetValuePtr(ProxyType);
-            }
-            if (InitGetKeysPtr != default)
-            {
-                GetKeys = (delegate* managed<TValue,TKey[]>)InitGetKeysPtr(ProxyType);
-            }
         }
 
 
@@ -144,11 +121,8 @@ namespace DynamicCache
 
         public void Dispose()
         {
-
-            ProxyType.DisposeDomain();
-            ProxyType = null;
+            GetKeys.DisposeDomain();
+            GetKeys.DisposeDomain();
         }
-
     }
-
 }

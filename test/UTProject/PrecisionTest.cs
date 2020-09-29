@@ -7,7 +7,7 @@ namespace UTProject
 {
 
     [Trait("快速查找", "Precision")]
-    public class PrecisionTest : NatashaIni
+    public class PrecisionTest
     {
         TestModel model;
         PrecisionCache<string> Handler1;
@@ -28,7 +28,7 @@ namespace UTProject
         }
 
         [Fact(DisplayName = "空集合测试1")]
-        public unsafe void TestModel2()
+        public void TestModel2()
         {
             var model2= new TestModel();
             model2.Model1.Clear();
@@ -39,7 +39,7 @@ namespace UTProject
         }
 
         [Fact(DisplayName = "精确查找树反向查找测试")]
-        public unsafe void TestModel5()
+        public void TestModel5()
         {
 
             Dictionary<string, string> dict = new Dictionary<string, string>();

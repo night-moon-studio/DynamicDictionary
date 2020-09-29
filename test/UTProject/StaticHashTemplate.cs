@@ -7,7 +7,7 @@ namespace UTProject
 {
 
     [Trait("静态模板构造", "Hash")]
-    public class StaticHashTemplate : NatashaIni
+    public class StaticHashTemplate
     {
 
         TestStaticModel model;

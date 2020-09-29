@@ -16,19 +16,11 @@
     <Company>NMSAzulX</Company>
     <PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
     <Authors>NMSAzulX</Authors>
-    <LangVersion>preview</LangVersion>
-	 <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
-
 
   <ItemGroup>
     <PackageReference Include="DotNetCore.BTFindTree" Version="1.2.0.1" />
-    <!--<PackageReference Include="NMS.RuntimeToDynamic" Version="1.1.1" />-->
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\RuntimeToDynamic\src\RuntimeToDynamic\RuntimeToDynamic.csproj" />
+    <PackageReference Include="NMS.RuntimeToDynamic" Version="1.1.1" />
   </ItemGroup>
 
 </Project>

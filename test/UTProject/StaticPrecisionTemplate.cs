@@ -7,7 +7,7 @@ namespace UTProject
 {
 
     [Trait("静态模板构造", "Precision")]
-    public class StaticPrecisionTemplate : NatashaIni
+    public class StaticPrecisionTemplate
     {
 
         TestStaticModel model;
