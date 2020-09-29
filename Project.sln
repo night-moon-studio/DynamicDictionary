@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BenchmarkProject", "test\Be
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicCache", "src\DynamicCache\DynamicCache.csproj", "{B1C95DDB-48C0-4286-A00B-E90CC6389E98}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RuntimeToDynamic", "..\RuntimeToDynamic\src\RuntimeToDynamic\RuntimeToDynamic.csproj", "{BE563DE6-CB56-4E4D-B430-060C0A437DA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B1C95DDB-48C0-4286-A00B-E90CC6389E98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1C95DDB-48C0-4286-A00B-E90CC6389E98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1C95DDB-48C0-4286-A00B-E90CC6389E98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE563DE6-CB56-4E4D-B430-060C0A437DA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE563DE6-CB56-4E4D-B430-060C0A437DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE563DE6-CB56-4E4D-B430-060C0A437DA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE563DE6-CB56-4E4D-B430-060C0A437DA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{DC5084F8-097B-482F-B20B-1471F61326A1} = {C4396801-F1E3-4033-B973-B7A12807EFFF}
 		{BADB6031-8605-40B4-94BF-96256438A77C} = {C4396801-F1E3-4033-B973-B7A12807EFFF}
 		{B1C95DDB-48C0-4286-A00B-E90CC6389E98} = {9A154FFA-A8AE-473E-8940-7020D44B9141}
+		{BE563DE6-CB56-4E4D-B430-060C0A437DA1} = {9A154FFA-A8AE-473E-8940-7020D44B9141}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E330F2E1-7532-4657-A941-C1782EAE9D1C}

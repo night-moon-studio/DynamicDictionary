@@ -7,7 +7,7 @@ namespace UTProject
 {
 
     [Trait("静态模板构造", "Fuzzy")]
-    public class StaticFuzzyTemplate
+    public class StaticFuzzyTemplate : NatashaIni
     {
 
         TestStaticModel model;
