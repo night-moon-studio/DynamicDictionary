@@ -12,7 +12,7 @@ namespace BenchmarkProject
         public TestModel()
         {
             Model1 = new Dictionary<string, string>();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 20; i++)
             {
                 string value = i.ToString();
                 Model1[value] = value;
