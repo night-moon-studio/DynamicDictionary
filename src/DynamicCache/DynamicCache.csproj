@@ -11,7 +11,7 @@
     <Version>1.3.0</Version>
     <PackageLicenseUrl>https://github.com/night-moon-studio/DynamicCache/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/night-moon-studio/DynamicCache</PackageProjectUrl>
-    <PackageTags>Roslyn;IL;Script;Dynamic;Dictionary;Fast;Cache; </PackageTags>
+    <PackageTags>Roslyn;IL;Script;Dynamic;Dictionary;Fast;Cache;</PackageTags>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <Company>NMSAzulX</Company>
     <PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
