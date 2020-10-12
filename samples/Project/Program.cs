@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Project
 {
@@ -6,7 +8,38 @@ namespace Project
     {
         static void Main(string[] args)
         {
+            NatashaInitializer.InitializeAndPreheating();
+            var domainName = Test();
+            for (int i = 0; i < 6; i++)
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            Console.WriteLine(domainName);
+            Console.WriteLine(DomainManagement.IsDeleted(domainName));
+            Console.ReadKey();
+        }
 
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string Test()
+        {
+            var dict = new Dictionary<string, int>();
+            for (int i = 0; i < 10; i++)
+            {
+
+                dict[i.ToString()] = i;
+
+            }
+            var temp = dict.HashTree();
+            var domainName = temp.ProxyType.GetDomain().Name;
+            Console.WriteLine(DomainManagement.IsDeleted(domainName));
+            temp.Dispose();
+            for (int i = 0; i < 6; i++)
+            {
+                GC.Collect();
+            }
+            return domainName;
         }
     }
 }

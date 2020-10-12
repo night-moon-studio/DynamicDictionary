@@ -10,9 +10,9 @@ namespace DynamicCache
     public unsafe abstract class DynamicCacheBuilder<TKey,TValue> : IDisposable
     {
 
-        public Type ProxyType;
-        public delegate* managed<TKey, TValue> GetValue;
-        public delegate* managed<TValue, TKey[]> GetKeys;
+        public readonly Type ProxyType;
+        public readonly delegate* managed<TKey, TValue> GetValue;
+        public readonly delegate* managed<TValue, TKey[]> GetKeys;
         public abstract string ScriptKeyAction(IDictionary<TKey, string> dict);
         public abstract string ScriptValueAction(IDictionary<TValue, string> dict);
 
@@ -22,7 +22,7 @@ namespace DynamicCache
             Func<Type,IntPtr> InitGetValuePtr = default;
             Func<Type, IntPtr> InitGetKeysPtr = default;
 
-            var nClass = NClass.UseDomain(typeof(TKey).GetDomain())
+            var nClass = NClass.RandomDomain()
                     .Public()
                     .Static()
                     .Unsafe();
@@ -33,17 +33,19 @@ namespace DynamicCache
             if (queryDirection != DyanamicCacheDirection.ValueToKey)
             {
 
+                //构建快查字典 给BTF使用
                 var key_builder = new Dictionary<TKey, string>();
                 foreach (var item in pairs)
                 {
                     key_builder[item.Key] = $"return {_r2d_handler.AddValue(item.Value)};";
                 }
 
+                //根据快查字典生成快查代码
                 StringBuilder keyBuilder = new StringBuilder();
                 keyBuilder.Append(ScriptKeyAction(key_builder));
                 keyBuilder.Append("return default;");
 
-                
+                //创建快查方法
                 nClass.Method(method =>
                 {
                     method
@@ -55,6 +57,7 @@ namespace DynamicCache
                     .Body(keyBuilder.ToString());
                 });
 
+                //使用委托返回上面方法的指针
                 InitGetValuePtr = (type) => {  return type.GetMethod("GetValueFromKey").MethodHandle.GetFunctionPointer(); };
 
             }
@@ -64,6 +67,7 @@ namespace DynamicCache
             if (queryDirection != DyanamicCacheDirection.KeyToValue)
             {
 
+                //构建快查字典 给BTF使用
                 var value_builder = new Dictionary<TValue, string>();                
                 foreach (var item in pairs)
                 {
@@ -85,12 +89,12 @@ namespace DynamicCache
 
                 }
 
-
+                //根据快查字典生成快查代码
                 StringBuilder valueBuilder = new StringBuilder();
                 valueBuilder.Append(ScriptValueAction(temp_value_buidler));
                 valueBuilder.Append("return null;");
 
-
+                //创建快查方法
                 nClass.Method(method =>
                 {
                     method
@@ -102,6 +106,7 @@ namespace DynamicCache
                     .Body(valueBuilder.ToString());
                 });
 
+                //使用委托返回上面方法的指针
                 InitGetKeysPtr = (type) => { return type.GetMethod("GetKeysFromValue").MethodHandle.GetFunctionPointer(); };
 
             }
@@ -144,9 +149,10 @@ namespace DynamicCache
 
         public void Dispose()
         {
-
+            //GetValue = null;
+            //GetKeys = null;
             ProxyType.DisposeDomain();
-            ProxyType = null;
+            //ProxyType = null;
         }
 
     }
