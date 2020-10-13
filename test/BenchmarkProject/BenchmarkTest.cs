@@ -45,12 +45,12 @@ namespace BenchmarkProject
             result = HashHandler["2"];
         }
 
-        [Benchmark(Description = "模糊查找树")]
-        public void TestFuzzy()
-        {
-            var result = FuzzyHandler["11"];
-            result = FuzzyHandler["2"];
-        }
+        //[Benchmark(Description = "模糊查找树")]
+        //public void TestFuzzy()
+        //{
+        //    var result = FuzzyHandler["11"];
+        //    result = FuzzyHandler["2"];
+        //}
 
         [Benchmark(Description = "精确查找树")]
         public void TestPrecision()
@@ -67,19 +67,19 @@ namespace BenchmarkProject
         }
 
 
-        [Benchmark(Description = "并发字典")]
-        public void TestConDict()
-        {
-            var result = ConDictHandler["11"];
-            result = ConDictHandler["2"];
-        }
+        //[Benchmark(Description = "并发字典")]
+        //public void TestConDict()
+        //{
+        //    var result = ConDictHandler["11"];
+        //    result = ConDictHandler["2"];
+        //}
 
-        [Benchmark(Description = "只读字典")]
-        public void TestImmDict()
-        {
-            var result = ReadonlyDictHandler["11"];
-            result = ReadonlyDictHandler["2"];
-        }
+        //[Benchmark(Description = "只读字典")]
+        //public void TestImmDict()
+        //{
+        //    var result = ReadonlyDictHandler["11"];
+        //    result = ReadonlyDictHandler["2"];
+        //}
 
     }
 }

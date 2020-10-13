@@ -2,12 +2,13 @@
 using RuntimeToDynamic;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DynamicCache
 {
 
-    public unsafe abstract class DynamicCacheBuilder<TKey,TValue> : IDisposable
+    public unsafe abstract class DynamicCacheBuilder<TKey, TValue> : IDisposable
     {
 
         public readonly Type ProxyType;
@@ -16,22 +17,41 @@ namespace DynamicCache
         public abstract string ScriptKeyAction(IDictionary<TKey, string> dict);
         public abstract string ScriptValueAction(IDictionary<TValue, string> dict);
 
-        public DynamicCacheBuilder(IDictionary<TKey, TValue> pairs, DyanamicCacheDirection queryDirection =  DyanamicCacheDirection.Both)
+        public DynamicCacheBuilder(IDictionary<TKey, TValue> pairs, DyanamicCacheDirection queryDirection = DyanamicCacheDirection.Both)
         {
 
-            Func<Type,IntPtr> InitGetValuePtr = default;
-            Func<Type, IntPtr> InitGetKeysPtr = default;
+            if (queryDirection != DyanamicCacheDirection.KeyToValue)
+            {
 
-            var nClass = NClass.RandomDomain()
-                    .Public()
-                    .Static()
-                    .Unsafe();
+                //构建快查字典 给BTF使用
+                var value_builder = new Dictionary<TValue, List<TKey>>();
+                foreach (var item in pairs)
+                {
 
-            AnonymousRTD _r2d_handler = new AnonymousRTD();
-            _r2d_handler.UseStaticReadonlyFields();
+                    if (!value_builder.ContainsKey(item.Value))
+                    {
+                        value_builder[item.Value] = new List<TKey>();
+                    }
+
+                    value_builder[item.Value].Add(item.Key);
+
+                }
+                var tempDict = value_builder.ToDictionary(item => item.Key, item => item.Value.ToArray());
+                GetKeys = tempDict.HashTree(DyanamicCacheDirection.KeyToValue).GetValue;
+            }
+
+            
 
             if (queryDirection != DyanamicCacheDirection.ValueToKey)
             {
+
+                var nClass = NClass.RandomDomain()
+                        .Public()
+                        .Static()
+                        .Unsafe();
+
+                AnonymousRTD _r2d_handler = new AnonymousRTD();
+                _r2d_handler.UseStaticReadonlyFields();
 
                 //构建快查字典 给BTF使用
                 var key_builder = new Dictionary<TKey, string>();
@@ -57,79 +77,19 @@ namespace DynamicCache
                     .Body(keyBuilder.ToString());
                 });
 
-                //使用委托返回上面方法的指针
-                InitGetValuePtr = (type) => {  return type.GetMethod("GetValueFromKey").MethodHandle.GetFunctionPointer(); };
 
-            }
-            
+                nClass
+                   .BodyAppendLine(_r2d_handler.FieldsScript)
+                   .BodyAppendLine(_r2d_handler.MethodScript);
 
 
-            if (queryDirection != DyanamicCacheDirection.KeyToValue)
-            {
-
-                //构建快查字典 给BTF使用
-                var value_builder = new Dictionary<TValue, string>();                
-                foreach (var item in pairs)
-                {
-                    if (!value_builder.ContainsKey(item.Value))
-                    {
-                        value_builder[item.Value] = $"return new {typeof(TKey).GetDevelopName()}[]{{{_r2d_handler.AddValue(item.Key)}";
-                    }
-                    else
-                    {
-                        value_builder[item.Value] += $",{_r2d_handler.AddValue(item.Key)}";
-                    }
-                }
-
-                var temp_value_buidler = new Dictionary<TValue, string>();
-                foreach (var item in value_builder)
-                {
-
-                    temp_value_buidler[item.Key] = item.Value + "};";
-
-                }
-
-                //根据快查字典生成快查代码
-                StringBuilder valueBuilder = new StringBuilder();
-                valueBuilder.Append(ScriptValueAction(temp_value_buidler));
-                valueBuilder.Append("return null;");
-
-                //创建快查方法
-                nClass.Method(method =>
-                {
-                    method
-                    .Param<TValue>("arg")
-                    .Return<TKey[]>()
-                    .Name("GetKeysFromValue")
-                    .Public()
-                    .Static()
-                    .Body(valueBuilder.ToString());
-                });
-
-                //使用委托返回上面方法的指针
-                InitGetKeysPtr = (type) => { return type.GetMethod("GetKeysFromValue").MethodHandle.GetFunctionPointer(); };
+                ProxyType = nClass.GetType();
+                _r2d_handler.GetInitMethod(nClass)();
+                GetValue = (delegate* managed<TKey, TValue>)(ProxyType.GetMethod("GetValueFromKey").MethodHandle.GetFunctionPointer());
 
             }
 
-            nClass
-                    .BodyAppendLine(_r2d_handler.FieldsScript)
-                    .BodyAppendLine(_r2d_handler.MethodScript);
-
-
-            ProxyType = nClass.GetType();
-            _r2d_handler.GetInitMethod(nClass)();
-
-            if (InitGetValuePtr!=default)
-	        {
-                GetValue = (delegate* managed<TKey, TValue>)InitGetValuePtr(ProxyType);
-            }
-            if (InitGetKeysPtr != default)
-            {
-                GetKeys = (delegate* managed<TValue,TKey[]>)InitGetKeysPtr(ProxyType);
-            }
         }
-
-
 
 
         public TValue this[TKey key]

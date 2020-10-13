@@ -8,7 +8,7 @@
     <PackageId>NMS.DynamicCache</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageReleaseNotes>将字典转换成动态查找树，以便快速查找。</PackageReleaseNotes>
-    <Version>1.3.0</Version>
+    <Version>1.4.2</Version>
     <PackageLicenseUrl>https://github.com/night-moon-studio/DynamicCache/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/night-moon-studio/DynamicCache</PackageProjectUrl>
     <PackageTags>Roslyn;IL;Script;Dynamic;Dictionary;Fast;Cache;</PackageTags>
