@@ -7,14 +7,13 @@ namespace UTProject
 {
 
     [Trait("快速查找", "Fuzzy")]
-    public class FuzzyTest: NatashaIni
+    public class FuzzyTest
     {
         TestModel model;
         FuzzyCache<string> Handler1;
 
         public FuzzyTest()
         {
-
             model = new TestModel();
             Handler1 = model.Model1.FuzzyTree();
         }
@@ -29,7 +28,7 @@ namespace UTProject
         }
 
         [Fact(DisplayName = "空集合测试1")]
-        public unsafe void TestModel4()
+        public void TestModel4()
         {
             var model2 = new TestModel();
             model2.Model1.Clear();
@@ -42,7 +41,7 @@ namespace UTProject
 
 
         [Fact(DisplayName = "模糊查找树反向查找测试")]
-        public unsafe void TestModel5()
+        public void TestModel5()
         {
 
             Dictionary<string, string> dict = new Dictionary<string, string>();

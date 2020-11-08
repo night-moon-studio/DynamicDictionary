@@ -5,17 +5,17 @@
 
 #### 使用方法(User Api)：  
 
- <br/>  
- 
- - 引入 动态构件库： NMS.DynamicCache
 
- - 引入 编译环境库： DotNetCore.Compile.Environment
 
- - 向引擎中注入定制的域： DomainManagement.RegisterDefault< AssemblyDomain >()
+### Natasha 初始化
 
- - 敲代码  
- 
- 
+  ```C#
+  //仅仅注册组件
+  NatashaInitializer.Initialize();
+  //注册组件+预热组件 , 之后编译会更加快速
+  await NatashaInitializer.InitializeAndPreheating();
+  ```
+
 <br/>  
 
 
