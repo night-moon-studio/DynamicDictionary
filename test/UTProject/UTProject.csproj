@@ -4,6 +4,7 @@
     <TargetFrameworks>netcoreapp2.2;netcoreapp3.0;</TargetFrameworks>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <IsPackable>false</IsPackable>
+	 <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
