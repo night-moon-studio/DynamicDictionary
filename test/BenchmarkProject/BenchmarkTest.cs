@@ -17,7 +17,7 @@ namespace BenchmarkProject
     [Orderer(SummaryOrderPolicy.FastestToSlowest)]
     [RankColumn(NumeralSystem.Arabic)]
     [CategoriesColumn]
-    public unsafe class BenchmarkTest
+    public class BenchmarkTest
     {
         public readonly TestModel model;
         public readonly FuzzyCache<string> FuzzyHandler;
@@ -39,7 +39,7 @@ namespace BenchmarkProject
         }
 
         [Benchmark(Description = "哈希查找树")]
-        public unsafe void TestHash()
+        public void TestHash()
         {
             var result = HashHandler["11"];
             result = HashHandler["2"];
@@ -53,14 +53,14 @@ namespace BenchmarkProject
         //}
 
         [Benchmark(Description = "精确查找树")]
-        public unsafe void TestPrecision()
+        public void TestPrecision()
         {
             var result = PrecisionHandler["11"];
             result = PrecisionHandler["2"];
         }
 
         [Benchmark(Description = "普通字典")]
-        public unsafe void TestDict()
+        public void TestDict()
         {
             var result = DictHandler["11"];
             result = DictHandler["2"];

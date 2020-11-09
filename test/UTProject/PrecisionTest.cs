@@ -7,7 +7,7 @@ namespace UTProject
 {
 
     [Trait("快速查找", "Precision")]
-    public unsafe class PrecisionTest
+    public class PrecisionTest
     {
         TestModel model;
         PrecisionCache<string> Handler1;

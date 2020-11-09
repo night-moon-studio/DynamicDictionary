@@ -7,7 +7,7 @@ namespace UTProject
 {
 
     [Trait("快速查找", "Fuzzy")]
-    public unsafe class FuzzyTest
+    public class FuzzyTest
     {
         TestModel model;
         FuzzyCache<string> Handler1;
@@ -19,7 +19,7 @@ namespace UTProject
         }
 
         [Fact(DisplayName = "模糊查找测试1")]
-        public unsafe void TestModel1()
+        public void TestModel1()
         {
             foreach (var item in model.Model1)
             {
