@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;net5.0;</TargetFrameworks>
     <Product>DynamicCache</Product>
     <Description>将字典转换成动态查找树，以便快速查找。</Description>
     <Copyright>Night Moon Studio</Copyright>
     <PackageId>NMS.DynamicCache</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageReleaseNotes>将字典转换成动态查找树，以便快速查找。</PackageReleaseNotes>
-    <Version>1.4.2.2</Version>
+    <Version>1.4.3</Version>
     <PackageLicenseUrl>https://github.com/night-moon-studio/DynamicCache/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/night-moon-studio/DynamicCache</PackageProjectUrl>
     <PackageTags>Roslyn;IL;Script;Dynamic;Dictionary;Fast;Cache;</PackageTags>
@@ -23,8 +23,8 @@
 
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.BTFindTree" Version="1.2.1" />
-    <PackageReference Include="NMS.RuntimeToDynamic" Version="1.2.1" />
+    <PackageReference Include="DotNetCore.BTFindTree" Version="1.2.1.2" />
+    <PackageReference Include="NMS.RuntimeToDynamic" Version="1.2.2" />
   </ItemGroup>
 
 </Project>
