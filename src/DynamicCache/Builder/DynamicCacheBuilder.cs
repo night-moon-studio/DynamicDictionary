@@ -49,7 +49,9 @@ namespace DynamicCache
                         .Public()
                         .Static()
                         .Unsafe();
-
+#if NET5_0
+                nClass.SkipInit();
+#endif
                 AnonymousRTD _r2d_handler = new AnonymousRTD();
                 _r2d_handler.UseStaticReadonlyFields();
 
