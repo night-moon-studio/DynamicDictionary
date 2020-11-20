@@ -1,5 +1,8 @@
-﻿namespace DynamicCache
+﻿using System;
+
+namespace DynamicCache
 {
+    [Flags]
     public enum DyanamicCacheDirection
     {
         KeyToValue,
