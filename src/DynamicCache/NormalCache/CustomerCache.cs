@@ -10,33 +10,24 @@ using System.Text;
 namespace System
 {
 
-    public class CustomerCache<TKey,TValue> : DynamicCacheBuilder<TKey, TValue>
+    public class CustomerCache<TKey,TValue> : DynamicDictionaryBuilder<TKey, TValue>
     {
 
         private readonly string _keySwitchCode;
-        private readonly string _valueSwitchCode;
         private readonly Func<TKey, string> _keyCaseCode;
-        private readonly Func<TValue, string> _valueCaseCode;
-        public CustomerCache(IDictionary<TKey, TValue> pairs,string keySwitchCode, Func<TKey, string> keyFunc, string valueSwitchCode = null, Func<TValue, string> valueFunc = null) 
-            : base(pairs, (keyFunc != null && valueFunc != null) ? DyanamicCacheDirection.Both : keyFunc == null ? DyanamicCacheDirection.ValueToKey : DyanamicCacheDirection.KeyToValue)
+        public CustomerCache(IDictionary<TKey, TValue> pairs,string keySwitchCode, Func<TKey, string> keyFunc) 
+            : base(pairs)
         {
 
             _keySwitchCode = keySwitchCode;
-            _valueSwitchCode = valueSwitchCode;
             _keyCaseCode = keyFunc;
-            _valueCaseCode = valueFunc;
 
         }
 
-        public override string ScriptKeyAction(IDictionary<TKey, string> dict)
+        public override string ScriptKeyAction(IDictionary<TKey, string> dict, string paramName)
         {
             return BTFTemplate.GetCustomerBTFScript(dict, _keySwitchCode, _keyCaseCode);
         }
-        public override string ScriptValueAction(IDictionary<TValue, string> dict)
-        {
-            return BTFTemplate.GetCustomerBTFScript(dict, _valueSwitchCode, _valueCaseCode);
-        }
-
     }
 
 }

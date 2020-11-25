@@ -10,23 +10,20 @@ using System.Text;
 namespace System
 {
 
-    public class HashCache<TKey,TValue> : DynamicCacheBuilder<TKey, TValue>
+    public class HashCache<TKey,TValue> : DynamicDictionaryBuilder<TKey, TValue>
     {
 
-        public HashCache(IDictionary<TKey, TValue> pairs, DyanamicCacheDirection queryDirection = DyanamicCacheDirection.Both) : base(pairs, queryDirection)
+        public HashCache(IDictionary<TKey, TValue> pairs) : base(pairs)
         {
 
 
         }
 
-        public override string ScriptKeyAction(IDictionary<TKey, string> dict)
+        public override string ScriptKeyAction(IDictionary<TKey, string> dict, string paramName)
         {
-            return BTFTemplate.GetHashBTFScript(dict);
+            return BTFTemplate.GetHashBTFScript(dict, paramName);
         }
-        public override string ScriptValueAction(IDictionary<TValue, string> dict)
-        {
-            return BTFTemplate.GetHashBTFScript(dict);
-        }
+
 
     }
 

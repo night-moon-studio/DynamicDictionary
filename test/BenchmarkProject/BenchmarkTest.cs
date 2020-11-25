@@ -20,9 +20,9 @@ namespace BenchmarkProject
     public class BenchmarkTest
     {
         public readonly TestModel model;
-        public readonly FuzzyCache<string> FuzzyHandler;
-        public readonly HashCache<string, string> HashHandler;
-        public readonly PrecisionCache<string> PrecisionHandler;
+        public readonly DynamicDictionaryBase<string, string> FuzzyHandler;
+        public readonly DynamicDictionaryBase<string, string> HashHandler;
+        public readonly DynamicDictionaryBase<string, string> PrecisionHandler;
         public readonly Dictionary<string, string> DictHandler;
         public readonly ConcurrentDictionary<string, string> ConDictHandler;
         public readonly ImmutableDictionary<string, string> ReadonlyDictHandler;

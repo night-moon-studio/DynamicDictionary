@@ -32,16 +32,17 @@ namespace Project
 
             }
             var temp = dict.HashTree();
+            var name = temp.GetType().Name;
             var result = temp["1"];
-            var a = temp.GetKeys(1);
-            var domainName = temp.ProxyType.GetDomain().Name;
-            Console.WriteLine(DomainManagement.IsDeleted(domainName));
-            temp.Dispose();
+            //var a = temp.GetKeys(1);
+            //var domainName = temp.ProxyType.GetDomain().Name;
+            Console.WriteLine(DomainManagement.IsDeleted(name));
+           // temp.Dispose();
             for (int i = 0; i < 6; i++)
             {
                 GC.Collect();
             }
-            return domainName;
+            return name;
         }
     }
 }

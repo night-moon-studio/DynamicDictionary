@@ -11,9 +11,9 @@ namespace UTProject
     public class HashTest : NatashaIni
     {
         TestModel model;
-        HashCache<string,string> HashHandler1;
-        HashCache<A, int> HashHandler2;
-        HashCache<int, A> HashHandler3;
+        DynamicDictionaryBase<string,string> HashHandler1;
+        DynamicDictionaryBase<A, int> HashHandler2;
+        DynamicDictionaryBase<int, A> HashHandler3;
         //HashCache<string,string>
 
         public HashTest()
@@ -63,11 +63,11 @@ namespace UTProject
                 Assert.Equal(item.Value, handler[item.Key]);
             }
             
-            var hashSet = new HashSet<string>(handler.GetKeys("a"));
-            Assert.Equal(3, hashSet.Count);
-            Assert.Contains("a", hashSet);
-            Assert.Contains("b", hashSet);
-            Assert.Contains("c", hashSet);
+            //var hashSet = new HashSet<string>(handler.GetKeys("a"));
+            //Assert.Equal(3, hashSet.Count);
+            //Assert.Contains("a", hashSet);
+            //Assert.Contains("b", hashSet);
+            //Assert.Contains("c", hashSet);
 
         }
 
@@ -79,7 +79,7 @@ namespace UTProject
             model2.Model1.Clear();
             var tempHandler = model2.Model1.HashTree();
             Assert.Equal(default, tempHandler["1"]);
-            Assert.Equal(default, tempHandler.GetKeys("1"));
+            //Assert.Equal(default, tempHandler.GetKeys("1"));
             Assert.Equal(default, tempHandler.GetValue("1"));
 
         }

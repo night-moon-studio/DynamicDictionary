@@ -10,23 +10,20 @@ using System.Text;
 namespace System
 {
 
-    public class FuzzyCache<TValue> : DynamicCacheBuilder<string, TValue>
+    public class FuzzyCache<TValue> : DynamicDictionaryBuilder<string, TValue>
     {
 
-        public FuzzyCache(IDictionary<string, TValue> pairs, DyanamicCacheDirection queryDirection = DyanamicCacheDirection.Both) :base(pairs, queryDirection)
+        public FuzzyCache(IDictionary<string, TValue> pairs) :base(pairs)
         {
 
            
         }
 
-        public override string ScriptValueAction(IDictionary<TValue, string> dict)
+        public override string ScriptKeyAction(IDictionary<string, string> dict, string paramName)
         {
-            return BTFTemplate.GetHashBTFScript(dict);
+            return BTFTemplate.GetGroupFuzzyPointBTFScript(dict, paramName);
         }
-        public override string ScriptKeyAction(IDictionary<string, string> dict)
-        {
-            return BTFTemplate.GetFuzzyPointBTFScript(dict);
-        }
+
 
     }
 
