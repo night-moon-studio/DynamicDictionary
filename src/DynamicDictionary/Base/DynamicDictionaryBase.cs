@@ -15,7 +15,7 @@ public abstract class DynamicDictionaryBase<TKey, TValue>
     public unsafe abstract TValue GetValue(TKey key);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe abstract bool TryGetValue(TKey key, out TValue value);
-    //public abstract bool TryGetKeys(TValue value, out TKey[] keys);
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe abstract void Change(TKey key, TValue value);
 

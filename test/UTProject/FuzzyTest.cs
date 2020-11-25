@@ -57,7 +57,8 @@ namespace UTProject
             {
                 Assert.Equal(item.Value, handler[item.Key]);
             }
-
+            handler["a"] = "b";
+            Assert.Equal("b", handler["a"]);
 
             //var hashSet = new HashSet<string>(handler.GetKeys("a"));
             //Assert.Equal(3, hashSet.Count);

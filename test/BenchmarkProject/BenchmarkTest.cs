@@ -45,12 +45,12 @@ namespace BenchmarkProject
             result = HashHandler["2"];
         }
 
-        //[Benchmark(Description = "模糊查找树")]
-        //public void TestFuzzy()
-        //{
-        //    var result = FuzzyHandler["11"];
-        //    result = FuzzyHandler["2"];
-        //}
+        [Benchmark(Description = "模糊查找树")]
+        public void TestFuzzy()
+        {
+            var result = FuzzyHandler["11"];
+            result = FuzzyHandler["2"];
+        }
 
         [Benchmark(Description = "精确查找树")]
         public void TestPrecision()

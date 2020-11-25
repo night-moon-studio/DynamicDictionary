@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9A154FFA-A8A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BenchmarkProject", "test\BenchmarkProject\BenchmarkProject.csproj", "{BADB6031-8605-40B4-94BF-96256438A77C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicCache", "src\DynamicCache\DynamicCache.csproj", "{B1C95DDB-48C0-4286-A00B-E90CC6389E98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDictionary", "src\DynamicDictionary\DynamicDictionary.csproj", "{B1C95DDB-48C0-4286-A00B-E90CC6389E98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

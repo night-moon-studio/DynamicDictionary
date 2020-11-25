@@ -1,11 +1,8 @@
 ﻿using Natasha.CSharp;
-using RuntimeToDynamic;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace DynamicCache
+namespace DynamicDictionary
 {
 
     public abstract class DynamicDictionaryBuilder<TKey, TValue>
@@ -18,6 +15,7 @@ namespace DynamicCache
 
         public DynamicDictionaryBuilder(IDictionary<TKey, TValue> pairs)
         {
+
             int count = 0;
             var nClass = NClass.RandomDomain()
                         .Public()
@@ -29,9 +27,6 @@ namespace DynamicCache
 
 
 
-            count += 1;
-            string field = _prefix + count;
-            nClass.PrivateReadonlyField<TKey>(field);
 
             //构建快查字典 给BTF使用
             var getValueMethodScript = new Dictionary<TKey, string>();
@@ -39,6 +34,9 @@ namespace DynamicCache
             var setValueMethodSciprt = new Dictionary<TKey, string>();
             foreach (var item in pairs)
             {
+                count += 1;
+                string field = _prefix + count;
+                nClass.PrivateReadonlyField<TValue>(field);
 
                 getValueMethodScript[item.Key] = $"return {field};";
                 tryGetValueMethodScript[item.Key] = $"value = {field};return true;";
@@ -94,7 +92,7 @@ namespace DynamicCache
 
             Instance = nClass
                 .DelegateHandler
-                .Func<DynamicDictionaryBase<TKey, TValue>>($"return new {ProxyType.GetDevelopName()}")();
+                .Func<DynamicDictionaryBase<TKey, TValue>>($"return new {ProxyType.GetDevelopName()}();")();
 
 
             foreach (var item in pairs)

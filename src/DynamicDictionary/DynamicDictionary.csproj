@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;net5.0;</TargetFrameworks>
-    <Product>DynamicCache</Product>
+    <Product>DynamicDictionary</Product>
     <Description>将字典转换成动态查找树，以便快速查找。</Description>
     <Copyright>Night Moon Studio</Copyright>
-    <PackageId>NMS.DynamicCache</PackageId>
+    <PackageId>NMS.DynamicDictionary</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageReleaseNotes>将字典转换成动态查找树，以便快速查找。</PackageReleaseNotes>
     <Version>1.4.4.2</Version>
-    <PackageLicenseUrl>https://github.com/night-moon-studio/DynamicCache/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/night-moon-studio/DynamicCache</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/night-moon-studio/DynamicDictionary/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/night-moon-studio/DynamicDictionary</PackageProjectUrl>
     <PackageTags>Roslyn;IL;Script;Dynamic;Dictionary;Fast;Cache;</PackageTags>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <Company>NMSAzulX</Company>

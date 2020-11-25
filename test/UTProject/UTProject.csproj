@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DynamicCache\DynamicCache.csproj" />
+    <ProjectReference Include="..\..\src\DynamicDictionary\DynamicDictionary.csproj" />
   </ItemGroup>
 
 </Project>

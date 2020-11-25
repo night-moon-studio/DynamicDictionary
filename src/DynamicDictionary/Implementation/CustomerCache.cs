@@ -1,5 +1,5 @@
 ﻿using BTFindTree;
-using DynamicCache;
+using DynamicDictionary;
 using Natasha;
 using Natasha.CSharp;
 using System;
