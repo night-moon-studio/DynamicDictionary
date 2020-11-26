@@ -49,7 +49,6 @@ namespace DynamicDictionary
             {
                 method
                 .Param<TKey>("key")
-                .Unsafe()
                 .Override()
                 .Return<TValue>()
                 .Name("GetValue")
@@ -64,7 +63,6 @@ namespace DynamicDictionary
                     method
                     .Param<TKey>("key")
                     .Param<TValue>("value", "out ")
-                    .Unsafe()
                     .Override()
                     .Return<bool>()
                     .Name("TryGetValue")
@@ -79,7 +77,6 @@ namespace DynamicDictionary
                     method
                     .Param<TKey>("key")
                     .Param<TValue>("value")
-                    .Unsafe()
                     .Override()
                     .Name("Change")
                     .Public()

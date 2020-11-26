@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 
 
@@ -12,12 +9,11 @@ public abstract class DynamicDictionaryBase<TKey, TValue>
 {
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public unsafe abstract TValue GetValue(TKey key);
+    public abstract TValue GetValue(TKey key);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public unsafe abstract bool TryGetValue(TKey key, out TValue value);
-    
+    public abstract bool TryGetValue(TKey key, out TValue value);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public unsafe abstract void Change(TKey key, TValue value);
+    public abstract void Change(TKey key, TValue value);
 
 
     public TValue this[TKey key]
