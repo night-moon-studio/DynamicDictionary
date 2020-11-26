@@ -7,21 +7,16 @@
 
  <br/>  
  
- - 引入 动态构件库： NMS.DynamicCache
+ - 引入 动态构件库： NMS.DynamicDictionary
 
- - 引入 编译环境库： DotNetCore.Compile.Environment
-
- - 向引擎中注入定制的域： DomainManagement.RegisterDefault< AssemblyDomain >()
-
- - 敲代码  
- 
- 
-<br/>  
-
+ - 初始化 Natasha ： NatashaInitializer.InitializeAndPreheating();
 
 ```C#
 
-dict.HashTree();
-dict.PrecitionTree();
+var fastDict = dict.HashTree / PrecitionTree / FuzzyTree();
+var result = fastDict["a"];
+fastDict["a"] = "b";
+fastDict["other"] = "b"; //ERROR dict 在生成时未带有 other 键
+
 
 ```
