@@ -5,23 +5,18 @@ using System.Collections.Generic;
 namespace System
 {
 
-    public class CustomerCache<TKey,TValue> : DynamicDictionaryBuilder<TKey, TValue>
+    public class CustomerCache<TKey,TValue> : DynamicSwitchBuilder<TKey, TValue>
     {
 
-        private readonly string _keySwitchCode;
-        private readonly Func<TKey, string> _keyCaseCode;
-        public CustomerCache(IDictionary<TKey, TValue> pairs,string keySwitchCode, Func<TKey, string> keyFunc) 
-            : base(pairs)
+        public CustomerCache(IDictionary<TKey, TValue> pairs, Func<TKey, string> keyToCase) : base(pairs, keyToCase)
         {
-
-            _keySwitchCode = keySwitchCode;
-            _keyCaseCode = keyFunc;
+           
 
         }
 
-        public override string ScriptKeyAction(IDictionary<TKey, string> dict, string paramName)
+        public override string ScriptKeyAction(IDictionary<TKey, string> dict, string paramName, Func<TKey, string> func = null)
         {
-            return BTFTemplate.GetCustomerBTFScript(dict, _keySwitchCode, _keyCaseCode);
+            return BTFTemplate.GetCustomerBTFScript(dict, paramName, func);
         }
     }
 

@@ -24,13 +24,18 @@ namespace Project
         [MethodImpl(MethodImplOptions.NoInlining)]
         public unsafe static string Test()
         {
+            var dict2 = new Dictionary<int,string>();
             var dict = new Dictionary<string, int>();
             for (int i = 0; i < 10; i++)
             {
 
                 dict[i.ToString()] = i;
+                dict2[i] = i.ToString();
 
             }
+            var test = dict2.CustomerTree(item => item.ToString());
+
+
             var temp = dict.HashTree();
             var name = temp.GetType().Name;
             var result = temp["1"];

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
+    <PackageReference Include="ImTools" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

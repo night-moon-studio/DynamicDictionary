@@ -5,15 +5,15 @@ using System.Collections.Generic;
 namespace DynamicDictionary
 {
 
-    public abstract class DynamicDictionaryBuilder<TKey, TValue>
+    public abstract class DynamicSwitchBuilder<TKey, TValue>
     {
 
         private static readonly string _prefix = "_anonymous_";
-        public abstract string ScriptKeyAction(IDictionary<TKey, string> dict, string paramName);
+        public abstract string ScriptKeyAction(IDictionary<TKey, string> dict, string paramName, Func<TKey, string> func = null);
 
         public readonly DynamicDictionaryBase<TKey, TValue> Instance;
 
-        public DynamicDictionaryBuilder(IDictionary<TKey, TValue> pairs)
+        public DynamicSwitchBuilder(IDictionary<TKey, TValue> pairs,Func<TKey,string> keyToCase = null)
         {
 
             int count = 0;
@@ -54,7 +54,7 @@ namespace DynamicDictionary
                 .Return<TValue>()
                 .Name("GetValue")
                 .Public()
-                .BodyAppend(ScriptKeyAction(getValueMethodScript, "key"))
+                .BodyAppend(ScriptKeyAction(getValueMethodScript, "key", keyToCase))
                 .BodyAppend("return default;");
             });
 
@@ -68,7 +68,7 @@ namespace DynamicDictionary
                     .Return<bool>()
                     .Name("TryGetValue")
                     .Public()
-                    .BodyAppend(ScriptKeyAction(tryGetValueMethodScript, "key"))
+                    .BodyAppend(ScriptKeyAction(tryGetValueMethodScript, "key",keyToCase))
                     .BodyAppend("value=default; return false;");
                 });
 
@@ -81,7 +81,7 @@ namespace DynamicDictionary
                     .Override()
                     .Name("Change")
                     .Public()
-                    .BodyAppend(ScriptKeyAction(setValueMethodSciprt, "key"))
+                    .BodyAppend(ScriptKeyAction(setValueMethodSciprt, "key", keyToCase))
                     .BodyAppend("throw new Exception(\"Can't find key!\");");
                 });
 

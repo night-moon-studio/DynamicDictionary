@@ -11,9 +11,9 @@ namespace System
         {
             return new HashCache<TKey, TValue>(dict).Instance;
         }
-        public static DynamicDictionaryBase<TKey, TValue> CustomerTree<TKey, TValue>(this IDictionary<TKey, TValue> dict, string keySwitchCode, Func<TKey, string> keyFunc, string valueSwitchCode = null, Func<TValue, string> valueFunc = null)
+        public static DynamicDictionaryBase<TKey, TValue> CustomerTree<TKey, TValue>(this IDictionary<TKey, TValue> dict, Func<TKey, string> keyFunc)
         {
-            return new CustomerCache<TKey, TValue>(dict, keySwitchCode, keyFunc).Instance;
+            return new CustomerCache<TKey, TValue>(dict, keyFunc).Instance;
         }
 
 
