@@ -11,11 +11,24 @@ namespace UTProject
     {
         TestModel model;
         DynamicDictionaryBase<string,string> Handler1;
-
+        DynamicDictionaryBase<string, string> Handler2;
         public PrecisionTest()
         {
             model = new TestModel();
+            Handler2 = new Dictionary<string, string>()
+            {
+                { "111891234","1" },
+                { "212895678","2" },
+                { "313896789","3" }
+
+            }.PrecisioTree();
             Handler1 = model.Model1.PrecisioTree();
+        }
+
+        [Fact(DisplayName = "精确查找测试4")]
+        public void TestModel4()
+        {
+            Assert.Equal(default, Handler2["413891234"]);
         }
 
         [Fact(DisplayName = "精确查找测试1")]
