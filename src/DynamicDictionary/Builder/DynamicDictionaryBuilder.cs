@@ -19,7 +19,7 @@ namespace DynamicDictionary
             int count = 0;
             var nClass = NClass.RandomDomain()
                         .Public()
-                        .Inheritance<DynamicDictionaryBase<TKey, TValue>>()
+                        .InheritanceAppend<DynamicDictionaryBase<TKey, TValue>>()
                         .Unsafe();
 
 #if NET5_0

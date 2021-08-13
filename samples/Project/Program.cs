@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Project
 {
     class Program
     {
+        public static event Func<int, Task> a;
         static void Main(string[] args)
         {
+            a += Program_a;
             NatashaInitializer.InitializeAndPreheating();
             var domainName = Test();
             for (int i = 0; i < 6; i++)
@@ -19,7 +22,14 @@ namespace Project
             Console.WriteLine(DomainManagement.IsDeleted(domainName));
             Console.ReadKey();
         }
-
+        public static async Task b()
+        {
+            await a(1);
+        }
+        private static async Task Program_a(int arg)
+        {
+            await Task.Delay(100);
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public unsafe static string Test()
