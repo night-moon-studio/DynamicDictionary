@@ -8,7 +8,7 @@
     <PackageId>NMS.DynamicDictionary</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageReleaseNotes>将字典转换成动态查找树，以便快速查找。</PackageReleaseNotes>
-    <Version>2.1.0</Version>
+    <Version>2.1.0.1</Version>
     <PackageLicenseUrl>https://github.com/night-moon-studio/DynamicDictionary/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/night-moon-studio/DynamicDictionary</PackageProjectUrl>
     <PackageTags>Roslyn;IL;Script;Dynamic;Dictionary;Fast;Cache;</PackageTags>
@@ -24,7 +24,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="DotNetCore.BTFindTree" Version="1.5.0" />
-		<PackageReference Include="DotNetCore.Natasha.CSharp.All" Version="3.4.0" />
+		<PackageReference Include="DotNetCore.Natasha.CSharp.All" Version="3.5.0" />
 	</ItemGroup>
 
 </Project>
