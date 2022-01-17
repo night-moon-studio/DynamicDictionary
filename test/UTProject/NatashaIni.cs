@@ -8,7 +8,7 @@ namespace UTProject
     {
         static NatashaIni()
         {
-            NatashaInitializer.InitializeAndPreheating();
+            NatashaInitializer.Preheating();
         }
     }
 }

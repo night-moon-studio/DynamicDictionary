@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0;</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0;</TargetFrameworks>
     <Product>DynamicDictionary</Product>
     <Description>将字典转换成动态查找树，以便快速查找。</Description>
     <Copyright>Night Moon Studio</Copyright>
@@ -24,7 +24,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="DotNetCore.BTFindTree" Version="1.5.0" />
-		<PackageReference Include="DotNetCore.Natasha.CSharp.All" Version="3.6.0" />
+		<PackageReference Include="DotNetCore.Natasha.CSharp" Version="4.0.0-beta.2" />
 	</ItemGroup>
 
 </Project>

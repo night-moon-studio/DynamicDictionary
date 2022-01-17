@@ -8,7 +8,7 @@ namespace BenchmarkProject
     {
         static void Main(string[] args)
         {
-            NatashaInitializer.InitializeAndPreheating();
+            NatashaInitializer.Preheating();
             BenchmarkRunner.Run<BenchmarkTest>();
             Console.ReadKey();
         }

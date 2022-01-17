@@ -11,7 +11,7 @@ namespace Project
         static void Main(string[] args)
         {
             a += Program_a;
-            NatashaInitializer.InitializeAndPreheating();
+            NatashaInitializer.Preheating();
             var domainName = Test();
             for (int i = 0; i < 6; i++)
             {

@@ -33,8 +33,7 @@ namespace BenchmarkProject
         public readonly ImHashMap<string, string> _imHashMap;
         public BenchmarkTest()
         {
-            NErrorLog.Enabled = true;
-            NatashaInitializer.InitializeAndPreheating();
+            NatashaInitializer.Preheating();
             model = new TestModel();
             _imMap = ImMap<string>.Empty;
             _imHashMap = ImHashMap<string, string>.Empty;

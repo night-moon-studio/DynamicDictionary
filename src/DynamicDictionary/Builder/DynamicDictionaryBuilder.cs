@@ -22,7 +22,7 @@ namespace DynamicDictionary
                         .InheritanceAppend<DynamicDictionaryBase<TKey, TValue>>()
                         .Unsafe();
 
-#if NET5_0
+#if NET5_0_OR_GREATER
             nClass.SkipInit();
 #endif
 
@@ -41,7 +41,7 @@ namespace DynamicDictionary
 
                 getValueMethodScript[item.Key] = $"return {field};";
                 tryGetValueMethodScript[item.Key] = $"value = {field};return true;";
-                setValueMethodSciprt[item.Key] = $"{field.ReadonlyScript()} = value;return;";
+                setValueMethodSciprt[item.Key] = $"{field.ToReadonlyScript()} = value;return;";
             }
 
             //根据快查字典生成快查代码
