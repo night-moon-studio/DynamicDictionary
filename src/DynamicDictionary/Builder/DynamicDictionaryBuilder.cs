@@ -17,8 +17,14 @@ namespace DynamicDictionary
         {
 
             int count = 0;
-            var nClass = NClass.RandomDomain()
-                        .Public()
+            var nClass = NClass
+#if NETCOREAPP3_1_OR_GREATER
+                 .RandomDomain()
+#else
+                .DefaultDomain()
+#endif
+
+                        .Access("public sealed")
                         .InheritanceAppend<DynamicDictionaryBase<TKey, TValue>>()
                         .Unsafe();
 
