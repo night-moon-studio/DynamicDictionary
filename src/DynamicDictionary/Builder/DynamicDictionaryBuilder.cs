@@ -13,15 +13,23 @@ namespace DynamicDictionary
 
         public readonly DynamicDictionaryBase<TKey, TValue> Instance;
 
-        public DynamicDictionaryBuilder(IDictionary<TKey, TValue> pairs)
+        public DynamicDictionaryBuilder(IDictionary<TKey, TValue> pairs, bool useDefault)
         {
 
             int count = 0;
-            var nClass = NClass
+            NClass nClass;
 #if NETCOREAPP3_1_OR_GREATER
-                 .RandomDomain()
+            if (useDefault)
+            {
+                nClass = NClass.DefaultDomain();
+            }
+            else
+            {
+                nClass = NClass.RandomDomain();
+            }
+            nClass
 #else
-                .DefaultDomain()
+            nClass = NClass.DefaultDomain()
 #endif
 
                         .Access("public sealed")

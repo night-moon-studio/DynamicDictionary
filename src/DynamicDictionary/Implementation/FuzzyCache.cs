@@ -8,7 +8,7 @@ namespace System
     public class FuzzyCache<TValue> : DynamicDictionaryBuilder<string, TValue>
     {
 
-        public FuzzyCache(IDictionary<string, TValue> pairs) :base(pairs)
+        public FuzzyCache(IDictionary<string, TValue> pairs, bool useDefault = false) : base(pairs, useDefault)
         {
 
            

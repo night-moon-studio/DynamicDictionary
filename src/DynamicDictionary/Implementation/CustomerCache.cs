@@ -8,7 +8,7 @@ namespace System
     public class CustomerCache<TKey,TValue> : DynamicSwitchBuilder<TKey, TValue>
     {
 
-        public CustomerCache(IDictionary<TKey, TValue> pairs, Func<TKey, string> keyToCase) : base(pairs, keyToCase)
+        public CustomerCache(IDictionary<TKey, TValue> pairs, Func<TKey, string> keyToCase, bool useDefault = false) : base(pairs, keyToCase, useDefault)
         {
            
 

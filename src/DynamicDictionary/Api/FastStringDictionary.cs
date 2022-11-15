@@ -14,12 +14,13 @@ namespace DynamicDictionary.Api
         protected internal readonly ConcurrentDictionary<string, TValue> _dict_cache;
         protected internal DynamicDictionaryBase<string, TValue> _fast_cache;
         protected Action SaveFastCache;
-        public FastStringDictionary()
+        protected internal bool use_default;
+        public FastStringDictionary(bool useDefault)
         {
-
+            use_default = useDefault;
             _currentLock = new CurrentLock();
             _dict_cache = new ConcurrentDictionary<string, TValue>();
-            _fast_cache = _dict_cache.PrecisioTree();
+            _fast_cache = _dict_cache.PrecisioTree(use_default);
 
         }
         public TValue this[string key] 

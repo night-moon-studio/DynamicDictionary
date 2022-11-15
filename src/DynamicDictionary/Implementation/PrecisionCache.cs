@@ -8,7 +8,7 @@ namespace System
     public class PrecisionCache<TValue> : DynamicDictionaryBuilder<string, TValue>
     {
 
-        public PrecisionCache(IDictionary<string, TValue> pairs) : base(pairs)
+        public PrecisionCache(IDictionary<string, TValue> pairs, bool useDefault = false) : base(pairs, useDefault)
         {
 
         }

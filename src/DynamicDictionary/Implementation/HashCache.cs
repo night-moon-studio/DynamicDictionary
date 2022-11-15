@@ -8,7 +8,7 @@ namespace System
     public class HashCache<TKey,TValue> : DynamicDictionaryBuilder<TKey, TValue>
     {
 
-        public HashCache(IDictionary<TKey, TValue> pairs) : base(pairs)
+        public HashCache(IDictionary<TKey, TValue> pairs,bool useDefault = false) : base(pairs,useDefault)
         {
 
 
